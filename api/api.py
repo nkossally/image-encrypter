@@ -5,7 +5,7 @@ from encrypt import encrypt_image
 from decrypt import decrypt_image
 from stable import forward_transformation, backwards_transformation
 from shift_rows import forward_shift, backward_shift
-from mix_column import mix, multiply_polynomials, hex_to_binary_string, multiply_binary_strings
+from mix_column import forward_mix, backward_mix
 
 app = Flask(__name__)
 
@@ -30,11 +30,16 @@ matrix_3 = [
     ["A6", "8C", "D8", "95"]
 ]
 
+matrix_4 = [
+    ['47', '40', 'A3', '4C'], 
+    ['37', 'D4', '70', '9F'], 
+    ['94', 'E4', '3A', '42'], 
+    ['ED', 'A5', 'A6', 'BC']
+]
+
 @app.route('/time')
 def blarg():
-    transformed = mix(matrix_3)
-    # transformed = multiply_binary_strings(hex_to_binary_string("02"), hex_to_binary_string("87"))
-    # transformed =  backward_shift(transformed)
+    transformed = backward_mix(matrix_4)
 
     # Example usage
     # key = "10111001111010101100111011001101"

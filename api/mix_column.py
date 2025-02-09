@@ -11,7 +11,13 @@ FORWARD_MATRIX = [
     [3, 1, 1, 2]
 ]
 
-# IRREDUCIBLE = "00011011"
+BACKWARD_MATRIX = [
+    [14, 11, 13, 9],
+    [9, 14, 11, 13],
+    [13, 9, 14, 11],
+    [11, 13, 9, 14]
+]
+
 IRREDUCIBLE = [0, 0, 0, 1, 1, 0, 1, 1]
 
 def string_to_int_array(s):
@@ -27,6 +33,19 @@ def string_to_int_array(s):
 
 def num_to_binary_string( num ):
     binary_string = format(num, '08b')
+
+    return binary_string
+
+def hex_to_binary_string_backwards( hex_string ):
+    print("hex_to_binary_string_backwards")
+    print(hex_string)
+
+    int_value_1 = int(hex_string[0], SIXTEEN)
+    int_value_2 = int(hex_string[1], SIXTEEN)
+
+    binary_string = format((int_value_1), '04b') + format((int_value_2), '04b')
+    
+    print(binary_string)
 
     return binary_string
 
@@ -91,15 +110,41 @@ def multiply_polynomials(poly1, poly2):
 
     # make it 8 bits
     if len(result) > 8:
-        print("too long")
-        print(result)
         result = result[len(result) - EIGHT:]
 
-    print("result")
-    print(result)
     return result
 
-def mix(matrix):
+def backward_mix(matrix):
+    transformed_matrix = []
+    
+    for i in range(FOUR):
+        transformed_matrix.append([])
+
+    for i in range(FOUR):
+        row = list(map(num_to_binary_string, BACKWARD_MATRIX[i]))
+        print(row)
+
+        for j in range(FOUR):
+            col = [matrix[0][j], matrix[1][j], matrix[2][j], matrix[3][j]]
+            col = list(map(hex_to_binary_string_backwards, col))
+
+
+            sum =  [0] * (EIGHT)
+            for k in range(FOUR):
+
+                product = multiply_binary_strings(col[k], row[k])
+                sum = add_8_bit_binary_arrays(sum, product)
+
+
+            print(sum)
+            first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
+            second_dig = binary_arr_to_hex_arr(sum[FOUR:])
+            transformed_matrix[i].append(first_dig + second_dig)
+
+    print(transformed_matrix)
+    return transformed_matrix
+
+def forward_mix(matrix ):
     transformed_matrix = []
     
     for i in range(FOUR):
@@ -107,6 +152,7 @@ def mix(matrix):
 
     for i in range(FOUR):
         row = list(map(num_to_binary_string, FORWARD_MATRIX[i]))
+        print(row)
 
         for j in range(FOUR):
             col = [matrix[0][j], matrix[1][j], matrix[2][j], matrix[3][j]]
@@ -114,48 +160,23 @@ def mix(matrix):
 
             sum =  [0] * (EIGHT)
             for k in range(FOUR):
-                print("get product")
-                print(col[k])
-                print(binary_str_to_hex_str(col[k]))
-                print(row[k])
-                print(binary_str_to_hex_str(row[k]))
 
                 product = multiply_binary_strings(col[k], row[k])
-                print("product")
-                print(product)
                 sum = add_8_bit_binary_arrays(sum, product)
 
 
-            transformed_matrix[i].append(sum)
-
-
-
-
-            print("col")
-            print(col)
-            print("row")
-            print(row)
-
-
-    
+            print(sum)
+            first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
+            second_dig = binary_arr_to_hex_arr(sum[FOUR:])
+            transformed_matrix[i].append(first_dig + second_dig)
 
     print(transformed_matrix)
-    # result = []
-    # for i in range(len(transformed_matrix)):
-    #     new_row = []
-    #     old_row = transformed_matrix[i]
-    #     for arr in old_row:
-    #         new_row.append(binary_arr_to_hex_arr(arr))
-        
-    #     result.append(new_row)
-
-
-    # return result
+    return transformed_matrix
 
 
 def binary_arr_to_hex_arr(arr):
     str_arr = map(str, arr)
-    return binary_str_to_hex_str("-".join(str_arr))
+    return binary_str_to_hex_str("".join(str_arr))
 
 def binary_str_to_hex_str(binary_string):
     """Converts a binary string to a hexadecimal string.
@@ -166,8 +187,8 @@ def binary_str_to_hex_str(binary_string):
     Returns:
         The hexadecimal string representation of the binary string, or None if the input is invalid.
     """
-    if not isinstance(binary_string, str) or not all(bit in '01' for bit in binary_string):
-        return None
+    # if not isinstance(binary_string, str) or not all(bit in '01' for bit in binary_string):
+    #     return None
 
     decimal_value = int(binary_string, 2)
 
