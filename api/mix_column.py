@@ -18,6 +18,15 @@ BACKWARD_MATRIX = [
     [11, 13, 9, 14]
 ]
 
+
+IRREDUCIBLES = [
+    [0, 0, 0, 1, 1, 0, 1, 1],
+    [0, 0, 1, 1, 0, 1, 1, 0],
+    [0, 1, 1, 0, 1, 1, 0, 0],
+    [1, 1, 0, 1, 1, 0, 0, 0],
+]
+
+
 IRREDUCIBLE = [0, 0, 0, 1, 1, 0, 1, 1]
 
 def string_to_int_array(s):
@@ -97,16 +106,42 @@ def multiply_polynomials(poly1, poly2):
         for j, coeff2 in enumerate(poly2):
             result[i + j] += coeff1 * coeff2
             result[i + j] =  result[i + j] % 2
+
+    for num in range(EIGHT + 1, EIGHT +  len(IRREDUCIBLES) + 1):
+        if len(result) >= num:
+            idx = len(result) - num
+            irreducibles_idx = num - EIGHT - 1
+            if result[idx] == 1:
+                print("num")
+                print(num)
+
+                print("idx")
+                print(idx)
+                print("irreducible idx")
+                print(irreducibles_idx)
+                last_8_bits = result[len(result)  - EIGHT:]
+                last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[irreducibles_idx])
+                result = result[0: len(result)  - EIGHT] + last_8_bits
+                # result = add_8_bit_binary_arrays(result, IRREDUCIBLES[irreducibles_idx])
+
     
 
-    ninth_bit = result[len(result) - 1 - EIGHT]
+    # ninth_bit = result[len(result) - 1 - EIGHT]
+    # tenth_bit = result[len(result) - 2 - EIGHT]
+    # eleventh_bit = result[len(result) - 3 - EIGHT]
 
-    if len(result) > 8 and ninth_bit == 1:
-        result = result[len(result)  - EIGHT:]
-        result = add_8_bit_binary_arrays(result, IRREDUCIBLE)
-
-
-        return result
+    # if len(result) >= 9 and ninth_bit == 1:
+    #     last_8_bits = result[len(result)  - EIGHT:]
+    #     last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[0])
+    #     result = result[0: len(result)  - EIGHT] + last_8_bits
+    
+    # if len(result) >= 10 and tenth_bit == 1:
+    #     last_8_bits = result[len(result)  - EIGHT:]
+    #     last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[1])
+    #     result = result[0: len(result)  - EIGHT] + last_8_bits
+    # if len(result) > 9 and tenth_bit == 1:
+    #     result = result[len(result)  - EIGHT:]
+    #     result = add_8_bit_binary_arrays(result, IRREDUCIBLES[0])
 
     # make it 8 bits
     if len(result) > 8:
