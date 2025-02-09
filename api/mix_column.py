@@ -19,15 +19,12 @@ BACKWARD_MATRIX = [
 ]
 
 
-IRREDUCIBLES = [
+POLYNOMIALS = [
     [0, 0, 0, 1, 1, 0, 1, 1],
     [0, 0, 1, 1, 0, 1, 1, 0],
     [0, 1, 1, 0, 1, 1, 0, 0],
     [1, 1, 0, 1, 1, 0, 0, 0],
 ]
-
-
-IRREDUCIBLE = [0, 0, 0, 1, 1, 0, 1, 1]
 
 def string_to_int_array(s):
   """Splits a string of digits into an array of integers.
@@ -102,14 +99,14 @@ def multiply_polynomials(poly1, poly2):
             result[i + j] += coeff1 * coeff2
             result[i + j] =  result[i + j] % 2
 
-    for num in range(EIGHT + 1, EIGHT +  len(IRREDUCIBLES) + 1):
+    for num in range(EIGHT + 1, EIGHT +  len(POLYNOMIALS) + 1):
         if len(result) >= num:
             idx = len(result) - num
-            irreducibles_idx = num - EIGHT - 1
+            POLYNOMIALS_idx = num - EIGHT - 1
             if result[idx] == 1:
 
                 last_8_bits = result[len(result)  - EIGHT:]
-                last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[irreducibles_idx])
+                last_8_bits = add_8_bit_binary_arrays(last_8_bits, POLYNOMIALS[POLYNOMIALS_idx])
                 result = result[0: len(result)  - EIGHT] + last_8_bits
 
     # make it 8 bits

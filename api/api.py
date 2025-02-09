@@ -39,8 +39,8 @@ matrix_4 = [
 
 @app.route('/time')
 def blarg():
-    # transformed = forward_mix(matrix_3)
-    transformed = backward_mix(matrix_4)
+    transformed = forward_mix(matrix_3)
+    # transformed = backward_mix(matrix_4)
 
     # Example usage
     # key = "10111001111010101100111011001101"
