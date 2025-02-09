@@ -46,16 +46,11 @@ def num_to_binary_string( num ):
     return binary_string
 
 def hex_to_binary_string_backwards( hex_string ):
-    print("hex_to_binary_string_backwards")
-    print(hex_string)
-
     int_value_1 = int(hex_string[0], SIXTEEN)
     int_value_2 = int(hex_string[1], SIXTEEN)
 
     binary_string = format((int_value_1), '04b') + format((int_value_2), '04b')
     
-    print(binary_string)
-
     return binary_string
 
 def hex_to_binary_string( hex_string ):
@@ -112,36 +107,10 @@ def multiply_polynomials(poly1, poly2):
             idx = len(result) - num
             irreducibles_idx = num - EIGHT - 1
             if result[idx] == 1:
-                print("num")
-                print(num)
 
-                print("idx")
-                print(idx)
-                print("irreducible idx")
-                print(irreducibles_idx)
                 last_8_bits = result[len(result)  - EIGHT:]
                 last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[irreducibles_idx])
                 result = result[0: len(result)  - EIGHT] + last_8_bits
-                # result = add_8_bit_binary_arrays(result, IRREDUCIBLES[irreducibles_idx])
-
-    
-
-    # ninth_bit = result[len(result) - 1 - EIGHT]
-    # tenth_bit = result[len(result) - 2 - EIGHT]
-    # eleventh_bit = result[len(result) - 3 - EIGHT]
-
-    # if len(result) >= 9 and ninth_bit == 1:
-    #     last_8_bits = result[len(result)  - EIGHT:]
-    #     last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[0])
-    #     result = result[0: len(result)  - EIGHT] + last_8_bits
-    
-    # if len(result) >= 10 and tenth_bit == 1:
-    #     last_8_bits = result[len(result)  - EIGHT:]
-    #     last_8_bits = add_8_bit_binary_arrays(last_8_bits, IRREDUCIBLES[1])
-    #     result = result[0: len(result)  - EIGHT] + last_8_bits
-    # if len(result) > 9 and tenth_bit == 1:
-    #     result = result[len(result)  - EIGHT:]
-    #     result = add_8_bit_binary_arrays(result, IRREDUCIBLES[0])
 
     # make it 8 bits
     if len(result) > 8:
@@ -157,7 +126,6 @@ def backward_mix(matrix):
 
     for i in range(FOUR):
         row = list(map(num_to_binary_string, BACKWARD_MATRIX[i]))
-        print(row)
 
         for j in range(FOUR):
             col = [matrix[0][j], matrix[1][j], matrix[2][j], matrix[3][j]]
@@ -171,7 +139,6 @@ def backward_mix(matrix):
                 sum = add_8_bit_binary_arrays(sum, product)
 
 
-            print(sum)
             first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
             second_dig = binary_arr_to_hex_arr(sum[FOUR:])
             transformed_matrix[i].append(first_dig + second_dig)
@@ -187,7 +154,6 @@ def forward_mix(matrix ):
 
     for i in range(FOUR):
         row = list(map(num_to_binary_string, FORWARD_MATRIX[i]))
-        print(row)
 
         for j in range(FOUR):
             col = [matrix[0][j], matrix[1][j], matrix[2][j], matrix[3][j]]
@@ -200,7 +166,6 @@ def forward_mix(matrix ):
                 sum = add_8_bit_binary_arrays(sum, product)
 
 
-            print(sum)
             first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
             second_dig = binary_arr_to_hex_arr(sum[FOUR:])
             transformed_matrix[i].append(first_dig + second_dig)
