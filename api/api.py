@@ -5,7 +5,7 @@ from encrypt import encrypt_image
 from decrypt import decrypt_image
 from stable import forward_transformation, backwards_transformation
 from shift_rows import forward_shift, backward_shift
-from mix_column import mix, multiply_polynomials, multiply_binary_strings
+from mix_column import mix, multiply_polynomials, hex_to_binary_string, multiply_binary_strings
 
 app = Flask(__name__)
 
@@ -32,7 +32,8 @@ matrix_3 = [
 
 @app.route('/time')
 def blarg():
-    transformed = mix(matrix_2)
+    transformed = mix(matrix_3)
+    # transformed = multiply_binary_strings(hex_to_binary_string("02"), hex_to_binary_string("87"))
     # transformed =  backward_shift(transformed)
 
     # Example usage
