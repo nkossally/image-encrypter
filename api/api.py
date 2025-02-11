@@ -6,7 +6,7 @@ from decrypt import decrypt_image
 from stable import forward_transformation, backwards_transformation
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
-from key_expansion import convert_key_to_arr
+from key_expansion import convert_binary_key_to_arr, convert_hex_key_to_arr
 
 app = Flask(__name__)
 
@@ -39,10 +39,12 @@ matrix_4 = [
 ]
 
 key = "00001010101000011000101100000011001111000000111110110011001011011111101110011111100010110101010100110001100011011010100101110100"
+hex_key = "0f1571c947d9e8590cb7add6af7f6798"
 
 @app.route('/time')
 def blarg():
-    convert_key_to_arr(key)
+    convert_hex_key_to_arr(hex_key)
+
     # transformed = forward_mix(matrix_3)
     # transformed = backward_mix(matrix_4)
 
