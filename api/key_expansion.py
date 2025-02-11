@@ -37,11 +37,15 @@ ROUND_CONSTANTS = [
 ]
 
 def handle_key_expansion(key):
-    bytes_arr = convert_binary_key_to_arr(key)
+    bytes_arr = convert_hex_key_to_arr(key)
+    # bytes_arr = convert_binary_key_to_arr(key)
+
+    print("initial key matrix")
+    print(bytes_arr)
+    print(convert_binary_matrix_to_hex_matrix(bytes_arr))
+
     for i in range(10):
         bytes_arr = handle_round(bytes_arr, i)
-
-    print(bytes_arr)
 
     return bytes_arr
 
@@ -55,7 +59,6 @@ def convert_binary_key_to_arr(key):
             row.append(bytes)
         bytes_arr.append(row)
 
-    print(bytes_arr)
     return bytes_arr
 
 def convert_hex_key_to_arr(key):
@@ -64,15 +67,12 @@ def convert_hex_key_to_arr(key):
         row = []
         for j in range(FOUR):
             start_idx = 2 * i + EIGHT * j
-            byte_1 = hex_to_binary_string(key[start_idx])
-            byte_2 = hex_to_binary_string(key[start_idx + 1])
+            byte_1 = hex_to_four_bit_binary_string(key[start_idx])
+            byte_2 = hex_to_four_bit_binary_string(key[start_idx + 1])
             row.append(byte_1 + byte_2)
         bytes_arr.append(row)
 
-    print(bytes_arr)
-
-    hex_arr = convert_binary_matrix_to_hex_matrix(bytes_arr)
-    print(hex_arr)
+    # hex_arr = convert_binary_matrix_to_hex_matrix(bytes_arr)
 
     return bytes_arr
 
@@ -81,20 +81,34 @@ def handle_round(matrix, round):
     last_bytes_arr = matrix[len(matrix) - 1]
     summand = g_function(last_bytes_arr, round)
 
-    for i in range(len(matrix)):
-        transformed_matrix[i] = xor(matrix[i], summand)
-        summand = transformed_matrix[i]
+    for row in matrix:
+        new_row = []
+        for j in range(len(row)):
+
+            new_row.append(xor(row[j], summand[j]))
+        summand = new_row
+        transformed_matrix.append(new_row)
+
+
+    
+    hex_matrix = convert_binary_matrix_to_hex_matrix(transformed_matrix)
+    print(hex_matrix)
+
+    print(transformed_matrix)
 
     return transformed_matrix
 
 def g_function(bytes_arr, round):
-    new_bytes_arr = bytes_arr[:1] + bytes_arr[0 : 1]
+
+    new_bytes_arr = bytes_arr[1:] + bytes_arr[0 : 1]
     transformed_bytes = []
     for i in range(len(bytes_arr)):
 
         binary_str = new_bytes_arr[i]
-        lookup_row = int(binary_str, 2)
-        lookup_col = int(binary_str, 2)
+        byte_1 = binary_str[0: FOUR]
+        byte_2 = binary_str[FOUR:]
+        lookup_row = int(byte_1, 2)
+        lookup_col = int(byte_2, 2)
         hex_str = S_BOX[lookup_row][lookup_col]
         transformed_binary_str = hex_to_binary_string(hex_str)
 
@@ -130,7 +144,6 @@ def convert_binary_matrix_to_hex_matrix(matrix):
             new_row.append(hex_str)
         transformed_matrix.append(new_row)
 
-    print(transformed_matrix)
     return transformed_matrix
 
 def binary_to_hex_string( binary_string ):
@@ -144,6 +157,13 @@ def hex_to_binary_string( hex_string ):
     int_value = int(hex_string, SIXTEEN)
 
     binary_string = format((int_value), '08b')
+    
+    return binary_string
+
+def hex_to_four_bit_binary_string( hex_string ):
+    int_value = int(hex_string, SIXTEEN)
+
+    binary_string = format((int_value), '04b')
     
     return binary_string
 
