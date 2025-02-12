@@ -6,7 +6,8 @@ from decrypt import decrypt_image
 from stable import forward_transformation, backwards_transformation
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
-from key_expansion import convert_binary_key_to_arr, convert_hex_key_to_arr, handle_key_expansion
+from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
+from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix
 
 app = Flask(__name__)
 
@@ -40,24 +41,43 @@ matrix_4 = [
 
 key = "00001010101000011000101100000011001111000000111110110011001011011111101110011111100010110101010100110001100011011010100101110100"
 hex_key = "0f1571c947d9e8590cb7add6af7f6798"
+text = "0123456789abcdeffedcba9876543210"
 
 @app.route('/time')
 def blarg():
-    handle_key_expansion(hex_key)
-    # handle_key_expansion(key)
+    curr_text = handle_first_round()
+    key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
 
-    # transformed = forward_mix(matrix_3)
-    # transformed = backward_mix(matrix_4)
+    # hex_sum = convert_binary_matrix_to_hex_matrix(curr_text)
+    # blarmey = convert_binary_matrix_to_hex_matrix(key_binary_arr)
+    # print(blarmey)
+    # print(curr_text)
+    # print()
+    # print(hex_sum)
+
+    handle_key_expansion_round(key_binary_arr, 0)
+
+    # for i in range(10):
+    #     print("round")
+    #     print(i)
+    #     key_binary_arr = handle_key_expansion_round( key_binary_arr, i)
+    #     hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
+    #     print(hex_arr)
 
     # Example usage
     # key = "10111001111010101100111011001101"
     # encoded_key = key.encode('utf-8')
 
     # encrypt_image("cat.jpg", "encrypted.img", encoded_key)
-    # print("encoded key")
-    # print(type(encoded_key))
-    # print(encoded_key)
 
     # decrypt_image("encrypted.img", "decrypted.jpg", encoded_key)
+
+def handle_first_round():
+    text_binary_arr = convert_32_char_hex_text_to_binary_matrix(text)
+    key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
+    sum = xor_binary_arrays(text_binary_arr, key_binary_arr)
+
+    return sum
+
 
 blarg()

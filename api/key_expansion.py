@@ -1,3 +1,5 @@
+from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, convert_binary_matrix_to_hex_matrix, convert_binary_arr_to_hex_arr
+
 SIXTEEN = 16
 FOUR = 4
 EIGHT = 8
@@ -36,16 +38,14 @@ ROUND_CONSTANTS = [
     "36000000"
 ]
 
+text = "0123456789abcdeffedcba9876543210"
+
 def handle_key_expansion(key):
-    bytes_arr = convert_hex_key_to_arr(key)
+    bytes_arr = convert_32_char_hex_text_to_binary_matrix(key)
     # bytes_arr = convert_binary_key_to_arr(key)
 
-    print("initial key matrix")
-    print(bytes_arr)
-    print(convert_binary_matrix_to_hex_matrix(bytes_arr))
-
     for i in range(10):
-        bytes_arr = handle_round(bytes_arr, i)
+        bytes_arr = handle_key_expansion_round(bytes_arr, i)
 
     return bytes_arr
 
@@ -61,12 +61,13 @@ def convert_binary_key_to_arr(key):
 
     return bytes_arr
 
-def convert_hex_key_to_arr(key):
+def convert_32_char_hex_text_to_binary_matrix(key):
     bytes_arr = []
     for i in range(FOUR):
         row = []
         for j in range(FOUR):
-            start_idx = 2 * i + EIGHT * j
+            # start_idx = 2 * i + EIGHT * j
+            start_idx = (i * EIGHT + j * 2)
             byte_1 = hex_to_four_bit_binary_string(key[start_idx])
             byte_2 = hex_to_four_bit_binary_string(key[start_idx + 1])
             row.append(byte_1 + byte_2)
@@ -76,10 +77,16 @@ def convert_hex_key_to_arr(key):
 
     return bytes_arr
 
-def handle_round(matrix, round):
+def handle_key_expansion_round(matrix, round):
     transformed_matrix = []
-    last_bytes_arr = matrix[len(matrix) - 1]
+    last_bytes_arr = matrix[- 1]
+    print("last_bytes_arr", last_bytes_arr)
+    initial_hex_matrix = convert_binary_matrix_to_hex_matrix(matrix)
+    print("initial mat", initial_hex_matrix)
     summand = g_function(last_bytes_arr, round)
+    final_hex_arr = convert_binary_arr_to_hex_arr(summand)
+    print("last_bytes_arr g func", summand)
+    print("final hex arr", final_hex_arr)
 
     for row in matrix:
         new_row = []
@@ -89,19 +96,18 @@ def handle_round(matrix, round):
         summand = new_row
         transformed_matrix.append(new_row)
 
-
-    
     hex_matrix = convert_binary_matrix_to_hex_matrix(transformed_matrix)
     print(hex_matrix)
-
-    print(transformed_matrix)
 
     return transformed_matrix
 
 def g_function(bytes_arr, round):
 
     new_bytes_arr = bytes_arr[1:] + bytes_arr[0 : 1]
+    print("g func new bytes")
+    print(new_bytes_arr)
     transformed_bytes = []
+    hex_transformed_bytes = []
     for i in range(len(bytes_arr)):
 
         binary_str = new_bytes_arr[i]
@@ -110,60 +116,21 @@ def g_function(bytes_arr, round):
         lookup_row = int(byte_1, 2)
         lookup_col = int(byte_2, 2)
         hex_str = S_BOX[lookup_row][lookup_col]
-        transformed_binary_str = hex_to_binary_string(hex_str)
+        print("hex_str", binary_str,lookup_row,  lookup_col, hex_str)
+        transformed_binary_str = hex_to_eight_bit_binary_string(hex_str)
 
         transformed_bytes.append(transformed_binary_str)
+    print("transformed bytes")
+    print(transformed_bytes)
     
     first_byte = transformed_bytes[0]
-    transformed_bytes[0] = xor(first_byte, ROUND_CONSTANTS[round])
+    round_constant =  ROUND_CONSTANTS[round]
+    round_constant_half_byte_1 = hex_to_four_bit_binary_string( round_constant[0])
+    round_constant_half_byte_2 = hex_to_four_bit_binary_string( round_constant[1])
+    round_constant_byte = round_constant_half_byte_1 +round_constant_half_byte_2
 
+
+    transformed_bytes[0] = xor(first_byte, round_constant_byte)
+    print(transformed_bytes)
     return transformed_bytes
-
-
-def xor(binary_str_1, binary_str_2):
-    sum = ""
-    for i in range(len(binary_str_1)):
-        if binary_str_1[i] != binary_str_2[i]:
-            sum += "1"
-        else:
-            sum += "0"
-    return sum
-
-def convert_binary_matrix_to_hex_matrix(matrix):
-    transformed_matrix = []
-
-    for i in range(len(matrix)):
-        new_row = []
-        for binary_string in matrix[i]:
-            byte_1 = binary_string[0: FOUR]
-            byte_2 = binary_string[FOUR :]
-            hex_str = binary_to_hex_string(byte_1) + binary_to_hex_string(byte_2)
-            if len(hex_str) == 4:
-                hex_str = hex_str[1] + hex_str[3]
-
-            new_row.append(hex_str)
-        transformed_matrix.append(new_row)
-
-    return transformed_matrix
-
-def binary_to_hex_string( binary_string ):
-    int_value = int(binary_string, 2)
-
-    hex_string = hex(int_value)[2:]
-    
-    return hex_string
-
-def hex_to_binary_string( hex_string ):
-    int_value = int(hex_string, SIXTEEN)
-
-    binary_string = format((int_value), '08b')
-    
-    return binary_string
-
-def hex_to_four_bit_binary_string( hex_string ):
-    int_value = int(hex_string, SIXTEEN)
-
-    binary_string = format((int_value), '04b')
-    
-    return binary_string
 

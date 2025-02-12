@@ -17,9 +17,6 @@ def forward_shift(matrix):
         transformed_matrix[2].append(matrix[2][shift_2])
         transformed_matrix[3].append(matrix[3][shift_3])
 
-
-    print(transformed_matrix)
-
     return transformed_matrix
 
 def backward_shift(matrix):
@@ -37,9 +34,6 @@ def backward_shift(matrix):
         transformed_matrix[1].append(matrix[1][shift_1])
         transformed_matrix[2].append(matrix[2][shift_2])
         transformed_matrix[3].append(matrix[3][shift_3])
-
-
-    print(transformed_matrix)
 
     return transformed_matrix
 

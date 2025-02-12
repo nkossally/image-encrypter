@@ -14,32 +14,15 @@ def encrypt_image(input_file, output_file, key):
     with open(input_file, "rb") as file:
         image_data = file.read()
     
-    print("image datat")
-    print(type(image_data))
-
-    
-
-    # print(image_data)
     
     binary_string = utf8_to_binary(image_data)
-    print("binary_string")
-    print(binary_string)
-    print(len(binary_string))
 
 
     # Pad the data to be a multiple of 16 bytes
     padded_data = pad(image_data, AES.block_size)
-    print("padded data")
-    print(type(padded_data))
 
 
     padded_binary_string = utf8_to_binary(padded_data)
-    print("padded binary string")
-    print(padded_binary_string)
-    print(len(padded_binary_string))
-
-
-    # print(padded_data)
 
     # Encrypt the data
     encrypted_data = cipher.encrypt(padded_data)

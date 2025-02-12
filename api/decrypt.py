@@ -20,7 +20,5 @@ def decrypt_image(input_file, output_file, key):
     with open(output_file, "wb") as file:
         file.write(unpadded_data)
 
-    print("Decryption successful. Decrypted file saved as:", output_file)
-
 # Example usage
 # decrypt_image("encrypted.img", "decrypted.jpg", key)

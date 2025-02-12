@@ -55,10 +55,8 @@ def transformation( matrix, transformation_matrix):
 
 def forward_transformation( matrix):
     transformed_matrix = transformation(matrix, S_BOX)
-    print(transformed_matrix)
     return transformed_matrix
 
 def backwards_transformation( matrix):
     transformed_matrix = transformation(matrix, INVERSE_MATRIX)
-    print(transformed_matrix)
     return transformed_matrix

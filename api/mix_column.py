@@ -140,7 +140,6 @@ def backward_mix(matrix):
             second_dig = binary_arr_to_hex_arr(sum[FOUR:])
             transformed_matrix[i].append(first_dig + second_dig)
 
-    print(transformed_matrix)
     return transformed_matrix
 
 def forward_mix(matrix ):
@@ -167,7 +166,6 @@ def forward_mix(matrix ):
             second_dig = binary_arr_to_hex_arr(sum[FOUR:])
             transformed_matrix[i].append(first_dig + second_dig)
 
-    print(transformed_matrix)
     return transformed_matrix
 
 
