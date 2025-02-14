@@ -79,27 +79,37 @@ def encrypt_16_bytes():
     # decrypt_image("encrypted.img", "decrypted.jpg", encoded_key)
 
 def decrypt_16_bytes(curr_text_binary_arr):
-    key_binary_arr = convert_hex_matrix_to_binary_matrix(decryption_key)
 
+    round_keys = []
+    key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
+
+
+    round_keys.insert(0, key_binary_arr)
 
     for i in range(10):
-        print("round", i)
+        round_key = handle_key_expansion_round(round_keys[0], i)
+        # key_hex_arr = convert_binary_matrix_to_hex_matrix(round_key)
+        # print("key hex arr", key_hex_arr)
+        round_keys.insert(0, round_key)
+
+    # key_binary_arr = convert_hex_matrix_to_binary_matrix(decryption_key)
+    print("decrypt round keys", round_keys)
+
+    for i in range(10):
+        print("decrypt round", i)
         curr_text_binary_arr = backwards_transformation(curr_text_binary_arr)
         print("sub", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
         curr_text_binary_arr = backward_shift(curr_text_binary_arr)
         print("shift", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
         if i != 9:
             curr_text_binary_arr = backward_mix(curr_text_binary_arr)
-            print("mix", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+            # print("mix", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
         
-        key_binary_arr = handle_key_expansion_round(key_binary_arr, i)
-        key_hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
-        print("key hex arr", key_hex_arr)
-        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, round_keys[i])
     
-    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, round_keys[len(round_keys) - 1])
     print("curr_text_hex_arr", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
-    print("key_hex_arr", convert_binary_matrix_to_hex_matrix(key_binary_arr))
+    print("key_hex_arr", convert_binary_matrix_to_hex_matrix( round_keys[len(round_keys) - 1]))
 
 
     return curr_text_binary_arr
