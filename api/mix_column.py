@@ -143,6 +143,7 @@ def backward_mix(matrix):
     return transformed_matrix
 
 def forward_mix(matrix ):
+    print("matrix", matrix)
     transformed_matrix = []
     
     for i in range(FOUR):
@@ -153,18 +154,22 @@ def forward_mix(matrix ):
 
         for j in range(FOUR):
             col = [matrix[0][j], matrix[1][j], matrix[2][j], matrix[3][j]]
-            col = list(map(hex_to_binary_string, col))
-
+            print("row", row)
+            print("col", col)
             sum =  [0] * (EIGHT)
             for k in range(FOUR):
 
                 product = multiply_binary_strings(col[k], row[k])
                 sum = add_8_bit_binary_arrays(sum, product)
 
+            sum_str = list(map(str, sum))
+            # first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
+            # second_dig = binary_arr_to_hex_arr(sum[FOUR:])
+        
+            transformed_matrix[i].append("".join(sum_str))
 
-            first_dig = binary_arr_to_hex_arr(sum[0 : FOUR])
-            second_dig = binary_arr_to_hex_arr(sum[FOUR:])
-            transformed_matrix[i].append(first_dig + second_dig)
+
+    print("transformed_matrix", transformed_matrix)
 
     return transformed_matrix
 

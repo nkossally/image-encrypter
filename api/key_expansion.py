@@ -80,13 +80,7 @@ def convert_32_char_hex_text_to_binary_matrix(key):
 def handle_key_expansion_round(matrix, round):
     transformed_matrix = []
     last_bytes_arr = matrix[- 1]
-    print("last_bytes_arr", last_bytes_arr)
-    initial_hex_matrix = convert_binary_matrix_to_hex_matrix(matrix)
-    print("initial mat", initial_hex_matrix)
     summand = g_function(last_bytes_arr, round)
-    final_hex_arr = convert_binary_arr_to_hex_arr(summand)
-    print("last_bytes_arr g func", summand)
-    print("final hex arr", final_hex_arr)
 
     for row in matrix:
         new_row = []
@@ -97,17 +91,13 @@ def handle_key_expansion_round(matrix, round):
         transformed_matrix.append(new_row)
 
     hex_matrix = convert_binary_matrix_to_hex_matrix(transformed_matrix)
-    print(hex_matrix)
 
     return transformed_matrix
 
 def g_function(bytes_arr, round):
 
     new_bytes_arr = bytes_arr[1:] + bytes_arr[0 : 1]
-    print("g func new bytes")
-    print(new_bytes_arr)
     transformed_bytes = []
-    hex_transformed_bytes = []
     for i in range(len(bytes_arr)):
 
         binary_str = new_bytes_arr[i]
@@ -116,12 +106,9 @@ def g_function(bytes_arr, round):
         lookup_row = int(byte_1, 2)
         lookup_col = int(byte_2, 2)
         hex_str = S_BOX[lookup_row][lookup_col]
-        print("hex_str", binary_str,lookup_row,  lookup_col, hex_str)
         transformed_binary_str = hex_to_eight_bit_binary_string(hex_str)
 
         transformed_bytes.append(transformed_binary_str)
-    print("transformed bytes")
-    print(transformed_bytes)
     
     first_byte = transformed_bytes[0]
     round_constant =  ROUND_CONSTANTS[round]
@@ -131,6 +118,5 @@ def g_function(bytes_arr, round):
 
 
     transformed_bytes[0] = xor(first_byte, round_constant_byte)
-    print(transformed_bytes)
     return transformed_bytes
 

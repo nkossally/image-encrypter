@@ -7,7 +7,7 @@ from stable import forward_transformation, backwards_transformation
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
-from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix
+from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix
 
 app = Flask(__name__)
 
@@ -43,26 +43,32 @@ key = "0000101010100001100010110000001100111100000011111011001100101101111110111
 hex_key = "0f1571c947d9e8590cb7add6af7f6798"
 text = "0123456789abcdeffedcba9876543210"
 
+decryption_key = [['b4', '8e', 'f3', '52'], ['ba', '98', '13', '4e'], ['7f', '4d', '59', '20'], ['86', '26', '18', '76']]
 @app.route('/time')
-def blarg():
-    curr_text = handle_first_round()
+def encrypt_16_bytes():
+
+    curr_text_binary_arr = convert_32_char_hex_text_to_binary_matrix(text)
     key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
+    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    print("curr_text_hex_arr", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+    print("key_hex_arr", convert_binary_matrix_to_hex_matrix(key_binary_arr))
 
-    # hex_sum = convert_binary_matrix_to_hex_matrix(curr_text)
-    # blarmey = convert_binary_matrix_to_hex_matrix(key_binary_arr)
-    # print(blarmey)
-    # print(curr_text)
-    # print()
-    # print(hex_sum)
-
-    handle_key_expansion_round(key_binary_arr, 0)
-
-    # for i in range(10):
-    #     print("round")
-    #     print(i)
-    #     key_binary_arr = handle_key_expansion_round( key_binary_arr, i)
-    #     hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
-    #     print(hex_arr)
+    for i in range(10):
+        print("round", i)
+        curr_text_binary_arr = forward_transformation(curr_text_binary_arr)
+        print("sub", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        curr_text_binary_arr = forward_shift(curr_text_binary_arr)
+        print("shift", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        if i != 9:
+            curr_text_binary_arr = forward_mix(curr_text_binary_arr)
+            print("mix", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        
+        key_binary_arr = handle_key_expansion_round(key_binary_arr, i)
+        key_hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
+        print("key hex arr", key_hex_arr)
+        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    
+    return curr_text_binary_arr
 
     # Example usage
     # key = "10111001111010101100111011001101"
@@ -72,12 +78,37 @@ def blarg():
 
     # decrypt_image("encrypted.img", "decrypted.jpg", encoded_key)
 
-def handle_first_round():
-    text_binary_arr = convert_32_char_hex_text_to_binary_matrix(text)
-    key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
-    sum = xor_binary_arrays(text_binary_arr, key_binary_arr)
+def decrypt_16_bytes(curr_text_binary_arr):
+    key_binary_arr = convert_hex_matrix_to_binary_matrix(decryption_key)
 
-    return sum
 
+    for i in range(10):
+        print("round", i)
+        curr_text_binary_arr = backwards_transformation(curr_text_binary_arr)
+        print("sub", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        curr_text_binary_arr = backward_shift(curr_text_binary_arr)
+        print("shift", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        if i != 9:
+            curr_text_binary_arr = backward_mix(curr_text_binary_arr)
+            print("mix", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+        
+        key_binary_arr = handle_key_expansion_round(key_binary_arr, i)
+        key_hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
+        print("key hex arr", key_hex_arr)
+        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    
+    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    print("curr_text_hex_arr", convert_binary_matrix_to_hex_matrix(curr_text_binary_arr))
+    print("key_hex_arr", convert_binary_matrix_to_hex_matrix(key_binary_arr))
+
+
+    return curr_text_binary_arr
+
+def blarg():
+    encrypted = encrypt_16_bytes()
+    print("encrypted is this", encrypted)
+    decrypted = decrypt_16_bytes(encrypted)
 
 blarg()
+
+

@@ -2,40 +2,33 @@ FOUR = 4
 
 def forward_shift(matrix):
     transformed_matrix = []
-
-    for i in range(len(matrix)):
-        transformed_matrix.append([])
     
-    for j in range(FOUR):
-        shift_1 = ((j + 1) + FOUR) % FOUR
-        shift_2 = ((j + 2) + FOUR) % FOUR
-        shift_3 = ((j + 3) + FOUR) % FOUR
+    for i in range(len(matrix)):
+        row = []
+        for j in range(FOUR):
+            shifted_i = shift(i, j)
 
-        
-        transformed_matrix[0].append(matrix[0][j])
-        transformed_matrix[1].append(matrix[1][shift_1])
-        transformed_matrix[2].append(matrix[2][shift_2])
-        transformed_matrix[3].append(matrix[3][shift_3])
+            row.append(matrix[shifted_i][j])
+        transformed_matrix.append(row)
 
     return transformed_matrix
 
 def backward_shift(matrix):
     transformed_matrix = []
-
-    for i in range(len(matrix)):
-        transformed_matrix.append([])
     
-    for j in range(FOUR):
-        shift_1 = ((j - 1) + FOUR) % FOUR
-        shift_2 = ((j - 2) + FOUR) % FOUR
-        shift_3 = ((j - 3) + FOUR) % FOUR
-        
-        transformed_matrix[0].append(matrix[0][j])
-        transformed_matrix[1].append(matrix[1][shift_1])
-        transformed_matrix[2].append(matrix[2][shift_2])
-        transformed_matrix[3].append(matrix[3][shift_3])
+    for i in range(len(matrix)):
+        row = []
+        for j in range(FOUR):
+            shifted_i = shift(i, -j)
+
+            row.append(matrix[shifted_i][j])
+        transformed_matrix.append(row)
 
     return transformed_matrix
+
+def shift(val, diff):
+    return ((val + diff) + FOUR) % FOUR
+
 
 
 

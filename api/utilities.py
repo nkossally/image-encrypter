@@ -24,6 +24,22 @@ def xor(binary_str_1, binary_str_2):
             sum += "0"
     return sum
 
+def convert_hex_matrix_to_binary_matrix(matrix):
+    transformed_matrix = []
+
+    for i in range(len(matrix)):
+        new_row = []
+        for hex_str in matrix[i]:
+            half_byte_1 = hex_str[0]
+            half_byte_2 = hex_str[1]
+            # binary_str = hex_to_four_bit_binary_string(half_byte_1) + hex_to_four_bit_binary_string(half_byte_2)
+            binary_str = hex_to_eight_bit_binary_string(hex_str)
+
+            new_row.append(binary_str)
+        transformed_matrix.append(new_row)
+
+    return transformed_matrix
+
 def hex_to_eight_bit_binary_string( hex_string ):
     int_value = int(hex_string, SIXTEEN)
 
