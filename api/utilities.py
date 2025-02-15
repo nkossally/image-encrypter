@@ -1,3 +1,6 @@
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+
 SIXTEEN = 16
 FOUR = 4
 
@@ -90,3 +93,27 @@ def binary_to_hex_string( binary_string ):
     hex_string = hex(int_value)[2:]
     
     return hex_string
+
+# Function to encrypt an image file
+def convert_image_to_binary_matrix(input_file):
+
+    # Read the image data
+    with open(input_file, "rb") as file:
+        image_data = file.read()
+    
+    
+    binary_string = utf8_to_binary(image_data)
+
+    # Pad the data to be a multiple of 16 bytes
+    padded_data = pad(image_data, AES.block_size)
+
+    print(padded_data)
+
+    return padded_data
+
+
+def utf8_to_binary(text):
+    # binary_string = ''.join(format(byte, '08b') for byte in text.encode('utf-8'))
+    binary_string = ''.join(format(byte, '08b') for byte in text)
+
+    return binary_string
