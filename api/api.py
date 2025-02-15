@@ -3,7 +3,7 @@ from flask import Flask
 
 from encrypt import encrypt_image
 from decrypt import decrypt_image
-from stable import forward_transformation, backwards_transformation
+from stable import forward_substitution, backwards_substitution
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
@@ -33,9 +33,9 @@ matrix_3 = [
 ]
 
 matrix_4 = [
-    ['47', '40', 'A3', '4C'], 
-    ['37', 'D4', '70', '9F'], 
-    ['94', 'E4', '3A', '42'], 
+    ['47', '40', 'A3', '4C'],
+    ['37', 'D4', '70', '9F'],
+    ['94', 'E4', '3A', '42'],
     ['ED', 'A5', 'A6', 'BC']
 ]
 
@@ -43,22 +43,27 @@ key = "0000101010100001100010110000001100111100000011111011001100101101111110111
 hex_key = "0f1571c947d9e8590cb7add6af7f6798"
 text = "0123456789abcdeffedcba9876543210"
 
-decryption_key = [['b4', '8e', 'f3', '52'], ['ba', '98', '13', '4e'], ['7f', '4d', '59', '20'], ['86', '26', '18', '76']]
+decryption_key = [['b4', '8e', 'f3', '52'], ['ba', '98', '13', '4e'], [
+    '7f', '4d', '59', '20'], ['86', '26', '18', '76']]
+
+
 @app.route('/time')
 def encrypt_16_bytes():
 
     curr_text_binary_arr = convert_32_char_hex_text_to_binary_matrix(text)
     key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
-    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+    curr_text_binary_arr = xor_binary_arrays(
+        curr_text_binary_arr, key_binary_arr)
 
     for i in range(10):
-        curr_text_binary_arr = forward_transformation(curr_text_binary_arr)
+        curr_text_binary_arr = forward_substitution(curr_text_binary_arr)
         curr_text_binary_arr = forward_shift(curr_text_binary_arr)
         if i != 9:
             curr_text_binary_arr = forward_mix(curr_text_binary_arr)
         key_binary_arr = handle_key_expansion_round(key_binary_arr, i)
         key_hex_arr = convert_binary_matrix_to_hex_matrix(key_binary_arr)
-        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, key_binary_arr)
+        curr_text_binary_arr = xor_binary_arrays(
+            curr_text_binary_arr, key_binary_arr)
     return curr_text_binary_arr
 
     # Example usage
@@ -69,32 +74,33 @@ def encrypt_16_bytes():
 
     # decrypt_image("encrypted.img", "decrypted.jpg", encoded_key)
 
+
 def decrypt_16_bytes(curr_text_binary_arr):
 
     round_keys = []
     key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
 
-
-    round_keys.insert(0, key_binary_arr)
-
-    for i in range(10):
-        round_key = handle_key_expansion_round(round_keys[0], i)
-        # key_hex_arr = convert_binary_matrix_to_hex_matrix(round_key)
-        round_keys.insert(0, round_key)
-
-    # key_binary_arr = convert_hex_matrix_to_binary_matrix(decryption_key)
+    # round_keys.insert(0, key_binary_arr)
 
     for i in range(10):
-        curr_text_binary_arr = backwards_transformation(curr_text_binary_arr)
+        round_keys.insert(0, key_binary_arr)
+        key_binary_arr = handle_key_expansion_round(key_binary_arr, i)
+        # key_hex_arr = convert_binary_matrix_to_hex_matrix(round_key
+
+    curr_text_binary_arr = xor_binary_arrays(
+        curr_text_binary_arr, key_binary_arr)
+
+    for i in range(10):
         curr_text_binary_arr = backward_shift(curr_text_binary_arr)
+        curr_text_binary_arr = backwards_substitution(curr_text_binary_arr)
+        curr_text_binary_arr = xor_binary_arrays(
+            curr_text_binary_arr, round_keys[i])
+
         if i != 9:
             curr_text_binary_arr = backward_mix(curr_text_binary_arr)
-        
-        curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, round_keys[i])
-    curr_text_binary_arr = xor_binary_arrays(curr_text_binary_arr, round_keys[len(round_keys) - 1])
-
 
     return curr_text_binary_arr
+
 
 def blarg():
     encrypted = encrypt_16_bytes()
@@ -104,6 +110,5 @@ def blarg():
 
     # convert_image_to_binary_matrix("cat.jpg")
 
+
 blarg()
-
-

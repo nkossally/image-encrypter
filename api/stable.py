@@ -59,10 +59,10 @@ def transformation( matrix, transformation_matrix):
     
     return transformation
 
-def forward_transformation( matrix):
+def forward_substitution( matrix):
     transformed_matrix = transformation(matrix, S_BOX)
     return transformed_matrix
 
-def backwards_transformation( matrix):
+def backwards_substitution( matrix):
     transformed_matrix = transformation(matrix, INVERSE_MATRIX)
     return transformed_matrix
