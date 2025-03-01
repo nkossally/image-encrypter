@@ -1,5 +1,7 @@
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
+from PIL import Image
+import numpy as np
 
 SIXTEEN = 16
 FOUR = 4
@@ -95,21 +97,30 @@ def binary_to_hex_string( binary_string ):
     return hex_string
 
 # Function to encrypt an image file
-def convert_image_to_binary_matrix(input_file):
+def convert_image_to_binary_matrices(input_file):
 
     # Read the image data
     with open(input_file, "rb") as file:
-        image_data = file.read()
-    
-    
-    binary_string = utf8_to_binary(image_data)
-
+        image_data = file.read()  
     # Pad the data to be a multiple of 16 bytes
     padded_data = pad(image_data, AES.block_size)
 
-    print(padded_data)
+    binary_string = utf8_to_binary(padded_data)
+    print(len(binary_string), len(binary_string )/ 128)
+    binary_matrices = []
+    print(binary_string[0:356])
 
-    return padded_data
+    for i in range(0, int(len(binary_string) / 128), 128):
+        binary_matrix = []
+        for j in range(0, 128, 32):
+            row = []
+            for k in range(0, 4):
+                idx = i * 128 + j * 32 + 8 * k 
+                row.append(binary_string[idx : idx + 8])
+            binary_matrix.append(row)
+        binary_matrices.append(binary_matrix)
+
+    return binary_matrices
 
 
 def utf8_to_binary(text):
@@ -117,3 +128,21 @@ def utf8_to_binary(text):
     binary_string = ''.join(format(byte, '08b') for byte in text)
 
     return binary_string
+
+
+# def blarg():
+
+#     # Convert the binary string matrix to a list of pixel values (0 for black, 255 for white)
+#     pixel_matrix = []
+#     for row in binary_matrix:
+#         pixel_matrix.append([255 if bit == '1' else 0 for bit in row])
+
+#     # Convert the list of lists into a numpy array
+#     pixel_array = np.array(pixel_matrix, dtype=np.uint8)
+
+#     # Create an image from the numpy array
+#     image = Image.fromarray(pixel_array)
+
+#     # Save the image or display it
+#     image.show()  # Displays the image
+#     image.save('binary_matrix_image.png')  # Saves the image as a PNG file

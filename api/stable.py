@@ -49,13 +49,16 @@ def transformation( matrix, transformation_matrix):
     for row in range(len(matrix)):
         for col in range(len(matrix[0])):
             binary_str = matrix[row][col]
-            lookup_row = int(binary_str[0 : 4], 2)
-            lookup_col = int(binary_str[4 :], 2)
-            hex_str = transformation_matrix[lookup_row][lookup_col]
-            half_byte_1 = hex_to_four_bit_binary_string(hex_str[0])
-            half_byte_2 = hex_to_four_bit_binary_string(hex_str[1])
+            if binary_str == "":
+                transformation[row].append("00000000")
+            else:
+                lookup_row = int(binary_str[0 : 4], 2)
+                lookup_col = int(binary_str[4 :], 2)
+                hex_str = transformation_matrix[lookup_row][lookup_col]
+                half_byte_1 = hex_to_four_bit_binary_string(hex_str[0])
+                half_byte_2 = hex_to_four_bit_binary_string(hex_str[1])
 
-            transformation[row].append(half_byte_1 + half_byte_2)
+                transformation[row].append(half_byte_1 + half_byte_2)
     
     return transformation
 
