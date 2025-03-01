@@ -5,6 +5,7 @@ import numpy as np
 
 SIXTEEN = 16
 FOUR = 4
+EIGHT = 8
 
 def xor_binary_arrays(arr_1, arr_2):
     transformed_matrix = []
@@ -106,9 +107,7 @@ def convert_image_to_binary_matrices(input_file):
     padded_data = pad(image_data, AES.block_size)
 
     binary_string = utf8_to_binary(padded_data)
-    print(len(binary_string), len(binary_string )/ 128)
     binary_matrices = []
-    print(binary_string[0:356])
 
     for i in range(0, int(len(binary_string) / 128), 128):
         binary_matrix = []
@@ -130,19 +129,59 @@ def utf8_to_binary(text):
     return binary_string
 
 
-# def blarg():
 
-#     # Convert the binary string matrix to a list of pixel values (0 for black, 255 for white)
-#     pixel_matrix = []
-#     for row in binary_matrix:
-#         pixel_matrix.append([255 if bit == '1' else 0 for bit in row])
+def convert_image_to_matrix():
 
-#     # Convert the list of lists into a numpy array
-#     pixel_array = np.array(pixel_matrix, dtype=np.uint8)
+    # Load the image
+    image_path = 'cat.jpg'  # Replace with your image file path
+    image = Image.open(image_path)
 
-#     # Create an image from the numpy array
-#     image = Image.fromarray(pixel_array)
 
-#     # Save the image or display it
-#     image.show()  # Displays the image
-#     image.save('binary_matrix_image.png')  # Saves the image as a PNG file
+    # Convert the image to RGB (in case it's RGBA, CMYK, etc.)
+    image = image.convert('RGB')
+
+    # Convert the image to a NumPy array
+    image_data = np.array(image)
+
+    # Define a threshold to convert colors to binary (e.g., 128)
+    threshold = 128
+
+    # Apply thresholding to each color channel (R, G, B)
+    binary_matrix = (image_data > threshold).astype(int)
+
+    # The result is a 3D matrix of shape (height, width, 3)
+    # where the third dimension represents [R_binary, G_binary, B_binary] for each pixel
+
+    # Show the binary matrix (optional)
+    return binary_matrix
+
+def binary_int_array_to_image(binary_matrix):
+
+    # Convert binary matrix to an 8-bit image (0=black, 255=white)
+    image_data = binary_matrix * 255  # Multiply by 255 to make it a grayscale image
+
+    # Convert the image data to a PIL Image
+    image = Image.fromarray(image_data.astype(np.uint8))
+
+    # Save or display the image
+    image.show()  # To display the image
+    image.save('binary_image.png')  # Save the image to a file
+
+def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
+    result = []
+    for color in range(3):
+        for row in binary_int_matrix:
+            color_segment_row = [elem[0]  for elem in row]
+            for i in range(EIGHT):
+                binary_str_matrix = []
+                for j in range(FOUR):
+                    str_row = []
+                    for k in range(FOUR):
+                        idx = i * FOUR * FOUR * EIGHT + j * EIGHT * FOUR + k * EIGHT
+                        sub_arr = list(map(str, color_segment_row[idx: idx + EIGHT]))
+                        sub_arr_str = "".join(sub_arr)
+                        str_row.append(sub_arr_str)
+                    binary_str_matrix.append(str_row)
+                result.append(binary_str_matrix)
+
+    return result
