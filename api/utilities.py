@@ -146,11 +146,7 @@ def convert_image_to_matrix():
     threshold = 128
     binary_matrix = (gray_array > threshold).astype(int)
 
-    # Print the binary matrix
-    print(binary_matrix)
     return binary_matrix
-
-
 
 
 def convert_image_to_matrix_with_color_data():
@@ -178,7 +174,7 @@ def convert_image_to_matrix_with_color_data():
     # Show the binary matrix (optional)
     return binary_matrix
 
-def binary_int_array_to_image(binary_matrix):
+def binary_int_array_to_image(binary_matrix, file_save_path):
     numpy_binary_matrix = np.array(binary_matrix)  # Ensure it's a NumPy array
 
     numpy_binary_matrix = numpy_binary_matrix.astype(np.uint8)  # Convert to unsigned 8-bit integers
@@ -191,7 +187,7 @@ def binary_int_array_to_image(binary_matrix):
 
     # Save or display the image
     image.show()  # To display the image
-    image.save('binary_image.png')  # Save the image to a file
+    image.save(file_save_path)  # Save the image to a file
 
 def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
     result = []

@@ -65,14 +65,6 @@ def encrypt_16_bytes(curr_text_binary_arr):
             curr_text_binary_arr, key_binary_arr)
     return curr_text_binary_arr
 
-    # Example usage
-    # key = "10111001111010101100111011001101"
-    # encoded_key = key.encode('utf-8')
-
-    # encrypt_image("cat.jpg", "encrypted.img", encoded_key)
-
-    # decrypt_image("encrypted.img", "decrypted.jpg", encoded_key)
-
 
 def decrypt_16_bytes(curr_text_binary_arr):
 
@@ -102,44 +94,20 @@ def decrypt_16_bytes(curr_text_binary_arr):
 
 
 def blarg():
-    # binary_matrix = convert_hex_matrix_to_binary_matrix(matrix)
-    # print(binary_matrix)
-    # encrypted = encrypt_16_bytes(binary_matrix)
-    # print("encrypted is", convert_binary_matrix_to_hex_matrix(encrypted))
-    # decrypted = decrypt_16_bytes(encrypted)
-    # print("decrypted is", convert_binary_matrix_to_hex_matrix(decrypted))
 
     binary_matrices = convert_image_to_matrix()
-    binary_int_array_to_image(binary_matrices)
+    # binary_int_array_to_image(binary_matrices)
     str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
     print(str_matrices[0])
     encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))
     print("encrypted_str_matrices", encrypted_str_matrices)
+    binary_int_arr = binary_string_matrices_to_binary_int_matrix(encrypted_str_matrices)
+    binary_int_array_to_image(binary_int_arr, "encrypted_image.png")
     decrypted_str_matrices = list(map(decrypt_16_bytes,  encrypted_str_matrices ))
     print("decrypted_str_matrices", decrypted_str_matrices)
     binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
-    binary_int_array_to_image(binary_int_arr)
+    binary_int_array_to_image(binary_int_arr, "decrypted_image.png")
 
-
- 
-
-
-
-    # binary_string_matrices_to_binary_int_matrix, convert_binary_str_matrix_to_str
-    # # convert_image_to_binary_matrix("cat.jpg")
 
 
 blarg()
-
-# def encrypt_image():
-#     binary_matrices = convert_image_to_binary_matrices("cat.jpg")
-
-#     encrypted_binary_matrices = list(map(encrypt_16_bytes, binary_matrices))
-
-#     print(encrypted_binary_matrices)
-
-
-
-
-
-# encrypt_image()
