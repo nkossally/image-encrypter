@@ -7,7 +7,7 @@ from stable import forward_substitution, backwards_substitution
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
-from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix, convert_image_to_binary_matrices, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices
+from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix, convert_image_to_binary_matrices, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, convert_binary_str_matrix_to_str
 
 app = Flask(__name__)
 
@@ -108,14 +108,24 @@ def blarg():
     # print("encrypted is", convert_binary_matrix_to_hex_matrix(encrypted))
     # decrypted = decrypt_16_bytes(encrypted)
     # print("decrypted is", convert_binary_matrix_to_hex_matrix(decrypted))
+
     binary_matrices = convert_image_to_matrix()
     binary_int_array_to_image(binary_matrices)
     str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
     print(str_matrices[0])
-    encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices[0 : 1] ))
+    encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))
     print("encrypted_str_matrices", encrypted_str_matrices)
     decrypted_str_matrices = list(map(decrypt_16_bytes,  encrypted_str_matrices ))
     print("decrypted_str_matrices", decrypted_str_matrices)
+    binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
+    binary_int_array_to_image(binary_int_arr)
+
+
+ 
+
+
+
+    # binary_string_matrices_to_binary_int_matrix, convert_binary_str_matrix_to_str
     # # convert_image_to_binary_matrix("cat.jpg")
 
 

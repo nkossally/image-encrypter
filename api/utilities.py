@@ -131,6 +131,29 @@ def utf8_to_binary(text):
 
 
 def convert_image_to_matrix():
+    # Load the image
+    image_path = 'cat.jpg'  # Replace with your image file path
+    image = Image.open(image_path)
+
+    # Convert to grayscale (this step makes the image easier to threshold)
+    gray_image = image.convert('L')
+
+    # Convert the grayscale image to a NumPy array
+    gray_array = np.array(gray_image)
+
+    # Apply a threshold to convert the grayscale image to binary
+    # You can adjust the threshold value (here, it's 128) to get the desired result
+    threshold = 128
+    binary_matrix = (gray_array > threshold).astype(int)
+
+    # Print the binary matrix
+    print(binary_matrix)
+    return binary_matrix
+
+
+
+
+def convert_image_to_matrix_with_color_data():
 
     # Load the image
     image_path = 'cat.jpg'  # Replace with your image file path
@@ -156,9 +179,12 @@ def convert_image_to_matrix():
     return binary_matrix
 
 def binary_int_array_to_image(binary_matrix):
+    numpy_binary_matrix = np.array(binary_matrix)  # Ensure it's a NumPy array
+
+    numpy_binary_matrix = numpy_binary_matrix.astype(np.uint8)  # Convert to unsigned 8-bit integers
 
     # Convert binary matrix to an 8-bit image (0=black, 255=white)
-    image_data = binary_matrix * 255  # Multiply by 255 to make it a grayscale image
+    image_data = numpy_binary_matrix * 255  # Multiply by 255 to make it a grayscale image
 
     # Convert the image data to a PIL Image
     image = Image.fromarray(image_data.astype(np.uint8))
@@ -168,6 +194,34 @@ def binary_int_array_to_image(binary_matrix):
     image.save('binary_image.png')  # Save the image to a file
 
 def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
+    result = []
+    for row in binary_int_matrix:
+        for i in range(EIGHT):
+            binary_str_matrix = []
+            for j in range(FOUR):
+                str_row = []
+                for k in range(FOUR):
+                    idx = i * FOUR * FOUR * EIGHT + j * EIGHT * FOUR + k * EIGHT
+                    sub_arr = list(map(str, row[idx: idx + EIGHT]))
+                    sub_arr_str = "".join(sub_arr)
+                    str_row.append(sub_arr_str)
+                binary_str_matrix.append(str_row)
+            result.append(binary_str_matrix)
+
+    return result
+
+def binary_string_matrices_to_binary_int_matrix(binary_str_matrices):
+    result = []
+    for i in range(0, len(binary_str_matrices), EIGHT):
+        string = ""
+        for j in range(EIGHT):
+            if i + j < len(binary_str_matrices):
+                string += convert_binary_str_matrix_to_str(binary_str_matrices[i + j])
+        arr = list(map(int, list(string)))
+        result.append(arr)
+    return result
+
+def rgb_binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
     result = []
     for color in range(3):
         for row in binary_int_matrix:
@@ -185,3 +239,11 @@ def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
                 result.append(binary_str_matrix)
 
     return result
+
+def convert_binary_str_matrix_to_str(binary_str_matrix):
+    def flatten_arr(arr):
+        return "".join(arr)
+
+    joined_matrix = list(map(flatten_arr, binary_str_matrix))
+    joined_string = flatten_arr(joined_matrix)
+    return joined_string
