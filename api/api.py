@@ -7,7 +7,7 @@ from stable import forward_substitution, backwards_substitution
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
-from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix, convert_image_to_binary_matrices, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, convert_binary_str_matrix_to_str
+from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix, convert_image_to_binary_matrices, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, image_to_byte_array, binary_array_to_image, binary_string_arr_to_binary_string_matrices, binary_string_matrices_to_binary_string_arr
 
 app = Flask(__name__)
 
@@ -94,20 +94,28 @@ def decrypt_16_bytes(curr_text_binary_arr):
 
 
 def blarg():
-
-    binary_matrices = convert_image_to_matrix()
-    # binary_int_array_to_image(binary_matrices)
-    str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
-    print(str_matrices[0])
-    encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))
-    print("encrypted_str_matrices", encrypted_str_matrices)
-    binary_int_arr = binary_string_matrices_to_binary_int_matrix(encrypted_str_matrices)
-    binary_int_array_to_image(binary_int_arr, "encrypted_image.png")
+    result = image_to_byte_array("cat.jpg")
+    binary_matrix = result[0]
+    width = result[1][0]
+    height = result[1][1]
+    str_matrices = binary_string_arr_to_binary_string_matrices(binary_matrix)
+    encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))    
+    flattened_arr = binary_string_matrices_to_binary_string_arr(encrypted_str_matrices)
+    binary_array_to_image(flattened_arr, width, height, "encrypted_image.png")
     decrypted_str_matrices = list(map(decrypt_16_bytes,  encrypted_str_matrices ))
-    print("decrypted_str_matrices", decrypted_str_matrices)
-    binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
-    binary_int_array_to_image(binary_int_arr, "decrypted_image.png")
+    flattened_arr = binary_string_matrices_to_binary_string_arr(decrypted_str_matrices)
+    binary_array_to_image(flattened_arr, width, height, "decrypted_image.png")
 
+
+
+    # binary_matrices = convert_image_to_matrix()
+    # str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
+    # encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))
+    # binary_int_arr = binary_string_matrices_to_binary_int_matrix(encrypted_str_matrices)
+    # binary_int_array_to_image(binary_int_arr, "encrypted_image.png")
+    # decrypted_str_matrices = list(map(decrypt_16_bytes,  encrypted_str_matrices ))
+    # binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
+    # binary_int_array_to_image(binary_int_arr, "decrypted_image.png")
 
 
 blarg()

@@ -2,6 +2,8 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from PIL import Image
 import numpy as np
+import math
+import io
 
 SIXTEEN = 16
 FOUR = 4
@@ -149,31 +151,6 @@ def convert_image_to_matrix():
     return binary_matrix
 
 
-def convert_image_to_matrix_with_color_data():
-
-    # Load the image
-    image_path = 'cat.jpg'  # Replace with your image file path
-    image = Image.open(image_path)
-
-
-    # Convert the image to RGB (in case it's RGBA, CMYK, etc.)
-    image = image.convert('RGB')
-
-    # Convert the image to a NumPy array
-    image_data = np.array(image)
-
-    # Define a threshold to convert colors to binary (e.g., 128)
-    threshold = 128
-
-    # Apply thresholding to each color channel (R, G, B)
-    binary_matrix = (image_data > threshold).astype(int)
-
-    # The result is a 3D matrix of shape (height, width, 3)
-    # where the third dimension represents [R_binary, G_binary, B_binary] for each pixel
-
-    # Show the binary matrix (optional)
-    return binary_matrix
-
 def binary_int_array_to_image(binary_matrix, file_save_path):
     numpy_binary_matrix = np.array(binary_matrix)  # Ensure it's a NumPy array
 
@@ -188,6 +165,7 @@ def binary_int_array_to_image(binary_matrix, file_save_path):
     # Save or display the image
     image.show()  # To display the image
     image.save(file_save_path)  # Save the image to a file
+
 
 def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
     result = []
@@ -206,6 +184,7 @@ def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
 
     return result
 
+
 def binary_string_matrices_to_binary_int_matrix(binary_str_matrices):
     result = []
     for i in range(0, len(binary_str_matrices), EIGHT):
@@ -217,23 +196,78 @@ def binary_string_matrices_to_binary_int_matrix(binary_str_matrices):
         result.append(arr)
     return result
 
-def rgb_binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
-    result = []
-    for color in range(3):
-        for row in binary_int_matrix:
-            color_segment_row = [elem[0]  for elem in row]
-            for i in range(EIGHT):
-                binary_str_matrix = []
-                for j in range(FOUR):
-                    str_row = []
-                    for k in range(FOUR):
-                        idx = i * FOUR * FOUR * EIGHT + j * EIGHT * FOUR + k * EIGHT
-                        sub_arr = list(map(str, color_segment_row[idx: idx + EIGHT]))
-                        sub_arr_str = "".join(sub_arr)
-                        str_row.append(sub_arr_str)
-                    binary_str_matrix.append(str_row)
-                result.append(binary_str_matrix)
 
+def image_to_byte_array(image_path):
+    img = Image.open(image_path)
+    img_array = np.array(img)
+    height, width, channels = img_array.shape
+    binary_strings = []
+    for row in img_array:
+        for pixel in row:
+            for channel_value in pixel:
+                binary_string = bin(channel_value)[2:].zfill(8)  # Ensure 8 bits
+                binary_strings.append(binary_string)
+    return binary_strings, (width, height)
+
+
+def binary_array_to_image(binary_strings, width, height, file_save_path):
+    """
+    Reconstructs an image from an array of binary strings and dimensions.
+
+    Args:
+        binary_strings (list): An array of binary strings representing the image data.
+        dimensions (tuple): The original image dimensions (width, height).
+
+    Returns:
+        Image.Image: A PIL Image object representing the reconstructed image.
+    """
+    total_pixels = width * height
+    if len(binary_strings) != total_pixels * 3:
+        print("should be error", len(binary_strings), width * height)
+        # raise ValueError("The number of binary strings does not match the image dimensions.")
+
+    img_array = np.zeros((height, width, 3), dtype=np.uint8)
+    index = 0
+    for y in range(height):
+        for x in range(width):
+            for c in range(3):
+                if index < len(binary_strings):
+                    binary_string = binary_strings[index]
+                    img_array[y, x, c] = int(binary_string, 2)
+                    index += 1
+                else:
+                    img_array[y, x, c] = int("00000000", 2)
+
+
+    img = Image.fromarray(img_array)
+    img.show()
+    img.save(file_save_path)  # Save the image to a file
+
+
+def binary_string_arr_to_binary_string_matrices(binary_int_matrix):
+    matrices = []
+    num_matrices = math.floor(len(binary_int_matrix)/(FOUR * FOUR))
+    for i in range(0, num_matrices, FOUR * FOUR ):
+        matrix = []
+        for j in range(FOUR):
+            arr = []
+            for k in range(FOUR):
+                idx = i * FOUR * FOUR + j * FOUR + k
+                if idx < len(binary_int_matrix):
+                    arr.append(binary_int_matrix[idx])
+                else:
+                    arr.append("00000000")
+            matrix.append(arr)
+        matrices.append(matrix)
+
+    return matrices
+
+
+def binary_string_matrices_to_binary_string_arr(binary_matrices):
+    result = [ ]
+    for matrix in binary_matrices:
+        for row in matrix:
+            result += row
     return result
 
 def convert_binary_str_matrix_to_str(binary_str_matrix):
