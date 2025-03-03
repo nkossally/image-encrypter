@@ -8,8 +8,32 @@ from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_binary_key_to_arr, convert_32_char_hex_text_to_binary_matrix, handle_key_expansion, handle_key_expansion_round
 from utilities import xor, hex_to_eight_bit_binary_string, hex_to_four_bit_binary_string, xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_hex_matrix_to_binary_matrix, convert_image_to_binary_matrices, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, image_to_byte_array, binary_array_to_image, binary_string_arr_to_binary_string_matrices, binary_string_matrices_to_binary_string_arr
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 
 app = Flask(__name__)
+
+# Configuration       
+cloudinary.config( 
+    cloud_name = "dhumr9ajv", 
+    api_key = "897897225992447", 
+    api_secret = "<your_api_secret>", # Click 'View API Keys' above to copy your API secret
+    secure=True
+)
+
+# # Upload an image
+# upload_result = cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg",
+#                                            public_id="shoes")
+# print(upload_result["secure_url"])
+
+# # Optimize delivery by resizing and applying auto-format and auto-quality
+# optimize_url, _ = cloudinary_url("shoes", fetch_format="auto", quality="auto")
+# print(optimize_url)
+
+# # Transform the image: auto-crop to square aspect_ratio
+# auto_crop_url, _ = cloudinary_url("shoes", width=500, height=500, crop="auto", gravity="auto")
+# print(auto_crop_url)
 
 matrix = [
     ["EA", "04", "65", "85"],

@@ -1,25 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import Spinner from './Components/Spinner'
+import Images from './Components/Image'
+import Buttons from './Components/Button'
+import { API_URL } from './config.js'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  
+  state = {
+    uploading: false,
+    images: []
+  }
+
+  onChange = e => {
+    const files = Array.from(e.target.files)
+    this.setState({ uploading: true })
+
+    const formData = new FormData()
+
+    files.forEach((file, i) => {
+      formData.append(i, file)
+    })
+
+    fetch(`${API_URL}/image-upload`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(images => {
+      this.setState({ 
+        uploading: false,
+        images
+      })
+    })
+  }
+
+  removeImage = id => {
+    this.setState({
+      images: this.state.images.filter(image => image.public_id !== id)
+    })
+  }
+  
+  render() {
+    const { uploading, images } = this.state
+
+    const content = () => {
+      switch(true) {
+        case uploading:
+          return <Spinner />
+        case images.length > 0:
+          return <Images images={images} removeImage={this.removeImage} />
+        default:
+          return <Buttons onChange={this.onChange} />
+      }
+    }
+
+    return (
+      <div>
+        <div className='buttons'>
+          {content()}
+        </div>
+      </div>
+    )
+  }
 }
-
-export default App;
