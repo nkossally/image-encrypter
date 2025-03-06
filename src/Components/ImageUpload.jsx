@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { API_URL } from '../config'
 
-const ImageUpload = () => {
+const ImageUpload = ({isDecryption}) => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [inputText, setInputText] = useState("")
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -13,13 +14,20 @@ const ImageUpload = () => {
     }
   };
 
-  const handleImageUpload = async () => {
+  const handleInputChange = e =>{
+    setInputText(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleImageEncryption = async () => {
     const formData = new FormData();
     formData.append("image", image);
-    console.log(image)
+    formData.append("key", inputText)
+
+    const endpoint = isDecryption ? "/decrypt" : "/encrypt"
 
     try {
-      const response = await fetch(`${API_URL}/upload`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         body: formData,
       });
@@ -39,9 +47,10 @@ const ImageUpload = () => {
       
       {/* Image preview */}
       {preview && <img src={preview} alt="Image preview" style={{ width: '200px', height: 'auto' }} />}
+      {isDecryption && <input onChange={handleInputChange} />}
       
       {/* Button to upload image */}
-      {image && <button onClick={handleImageUpload}>Upload Image</button>}
+      {image && <button onClick={handleImageEncryption}>Upload Image</button>}
     </div>
   );
 };
