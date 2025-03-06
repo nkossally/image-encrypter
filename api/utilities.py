@@ -4,6 +4,19 @@ from PIL import Image
 import numpy as np
 import math
 import io
+from io import BytesIO
+import cloudinary
+import cloudinary.uploader
+import secrets
+
+# Configuration       
+cloudinary.config(
+    cloud_name = "dhumr9ajv", 
+    api_key = "897897225992447", 
+    api_secret = "kzphOSXDte8CvQLQ5m6-YFyhQvo", # Click 'View API Keys' above to copy your API secret
+    secure=True
+)
+
 
 SIXTEEN = 16
 FOUR = 4
@@ -132,10 +145,9 @@ def utf8_to_binary(text):
 
 
 
-def convert_image_to_matrix():
+def convert_image_to_matrix(file):
     # Load the image
-    image_path = 'cat.jpg'  # Replace with your image file path
-    image = Image.open(image_path)
+    image = Image.open(file)
 
     # Convert to grayscale (this step makes the image easier to threshold)
     gray_image = image.convert('L')
@@ -158,13 +170,22 @@ def binary_int_array_to_image(binary_matrix, file_save_path):
 
     # Convert binary matrix to an 8-bit image (0=black, 255=white)
     image_data = numpy_binary_matrix * 255  # Multiply by 255 to make it a grayscale image
+    print("image_data", image_data)
 
     # Convert the image data to a PIL Image
     image = Image.fromarray(image_data.astype(np.uint8))
 
-    # Save or display the image
-    image.show()  # To display the image
-    image.save(file_save_path)  # Save the image to a file
+    buffered = io.BytesIO()
+    image.save(buffered, format="PNG")  # You can change format if needed
+    buffered.seek(0)
+
+    upload_result = cloudinary.uploader.upload(buffered, public_id="897897225992447")
+    print("upload result", upload_result["secure_url"])
+
+    # # Save or display the image
+    # image.show()  # To display the image
+    # image.save(file_save_path)  # Save the image to a file
+    return {"url": upload_result["secure_url"]}
 
 
 def binary_int_matrix_to_binary_string_matrices(binary_int_matrix):
@@ -277,3 +298,7 @@ def convert_binary_str_matrix_to_str(binary_str_matrix):
     joined_matrix = list(map(flatten_arr, binary_str_matrix))
     joined_string = flatten_arr(joined_matrix)
     return joined_string
+
+def generate_key():
+    hex_string = secrets.token_hex(16)  
+    return hex_string

@@ -7,7 +7,7 @@ from stable import forward_substitution, backwards_substitution
 from shift_rows import forward_shift, backward_shift
 from mix_column import forward_mix, backward_mix
 from key_expansion import convert_32_char_hex_text_to_binary_matrix, handle_key_expansion_round
-from utilities import xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, image_to_byte_array, binary_array_to_image, binary_string_arr_to_binary_string_matrices, binary_string_matrices_to_binary_string_arr
+from utilities import xor_binary_arrays, convert_binary_matrix_to_hex_matrix, convert_image_to_matrix, binary_int_array_to_image, binary_int_matrix_to_binary_string_matrices, binary_string_matrices_to_binary_int_matrix, image_to_byte_array, binary_array_to_image, binary_string_arr_to_binary_string_matrices, binary_string_matrices_to_binary_string_arr, generate_key
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
@@ -33,36 +33,71 @@ cloudinary.config(
 
 
 key = "00001010101000011000101100000011001111000000111110110011001011011111101110011111100010110101010100110001100011011010100101110100"
-hex_key = "0f1571c947d9e8590cb7add6af7f6798"
+# hex_key = "0f1571c947d9e8590cb7add6af7f6798"
 text = "0123456789abcdeffedcba9876543210"
 
 decryption_key = [['b4', '8e', 'f3', '52'], ['ba', '98', '13', '4e'], [
     '7f', '4d', '59', '20'], ['86', '26', '18', '76']]
 
-@app.route('/upload', methods = ['POST'])
+@app.route('/encrypt', methods = ['POST'])
 @cross_origin()
-def upload():
+def encrypt():
     if 'image' not in request.files:
         return jsonify({"error": "No file part"}), 400
 
     file = request.files['image']
+
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    
+    if file and allowed_file(file.filename):
+        binary_matrices = convert_image_to_matrix(file)
+        str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
+        hex_key = generate_key()
+        encrypted_str_matrices = []
+        for matrix in str_matrices:
+            encrypted_str_matrices.append(encrypt_16_bytes(matrix, hex_key))
+        binary_int_arr = binary_string_matrices_to_binary_int_matrix(encrypted_str_matrices)
+        result = binary_int_array_to_image(binary_int_arr, "encrypted_image.png")
+
+        print("result", result)
+
+        return jsonify({"message": "File uploaded successfully", "url": result, "hex_key": hex_key }), 200
+    else:
+        return jsonify({"error": "Unsupported file type"}), 415
+
+
+@app.route('/decrypt', methods = ['POST'])
+@cross_origin()
+def decrypt():
+    if 'image' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['image']
+
+    hex_key = request.form.get('key')
+
+    print("key", key)
     
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     
     if file and allowed_file(file.filename):
-        # Secure the filename and save the file
-        filename = secure_filename(file.filename)
-        # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        upload_result = cloudinary.uploader.upload(file, public_id="897897225992447")
-        print("upload result", upload_result["secure_url"])
+        binary_matrices = convert_image_to_matrix(file)
+        str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
+        decrypted_str_matrices = []
+        for matrix in str_matrices:
+            decrypted_str_matrices.append(decrypt_16_bytes(matrix, hex_key))       
+        binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
+        result = binary_int_array_to_image(binary_int_arr, "decrypted_image.png")
 
-        return jsonify({"message": "File uploaded successfully", "filename": filename}), 200
+        print("result", result)
+
+        return jsonify({"message": "File uploaded successfully", "url": result }), 200
     else:
         return jsonify({"error": "Unsupported file type"}), 415
 
-def encrypt_16_bytes(curr_text_binary_arr):
-
+def encrypt_16_bytes(curr_text_binary_arr, hex_key):
     key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
     curr_text_binary_arr = xor_binary_arrays(
         curr_text_binary_arr, key_binary_arr)
@@ -79,7 +114,7 @@ def encrypt_16_bytes(curr_text_binary_arr):
     return curr_text_binary_arr
 
 
-def decrypt_16_bytes(curr_text_binary_arr):
+def decrypt_16_bytes(curr_text_binary_arr, hex_key):
 
     round_keys = []
     key_binary_arr = convert_32_char_hex_text_to_binary_matrix(hex_key)
@@ -106,7 +141,7 @@ def decrypt_16_bytes(curr_text_binary_arr):
     return curr_text_binary_arr
 
 
-def blarg():
+def blarg(hex_key):
     # result = image_to_byte_array("cat.jpg")
     # binary_matrix = result[0]
     # width = result[1][0]
@@ -123,12 +158,17 @@ def blarg():
 
     binary_matrices = convert_image_to_matrix()
     str_matrices = binary_int_matrix_to_binary_string_matrices(binary_matrices)
-    encrypted_str_matrices = list(map(encrypt_16_bytes, str_matrices ))
+    encrypted_str_matrices = []
+    for matrix in str_matrices:
+        encrypted_str_matrices.append(encrypt_16_bytes(matrix, hex_key))
     binary_int_arr = binary_string_matrices_to_binary_int_matrix(encrypted_str_matrices)
     binary_int_array_to_image(binary_int_arr, "encrypted_image.png")
-    decrypted_str_matrices = list(map(decrypt_16_bytes,  encrypted_str_matrices ))
+    decrypted_str_matrices = []
+    for matrix in str_matrices:
+        decrypted_str_matrices.append(decrypt_16_bytes(matrix, hex_key))
+    
     binary_int_arr = binary_string_matrices_to_binary_int_matrix(decrypted_str_matrices)
     binary_int_array_to_image(binary_int_arr, "decrypted_image.png")
 
 
-blarg()
+# blarg()
