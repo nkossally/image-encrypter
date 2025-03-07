@@ -1,15 +1,17 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Tabs } from "@mui/material";
-import { TabContext, TabPanel, TabList } from "@mui/lab";
 
 import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-
 import ImageUpload from "./Components/ImageUpload.jsx";
+import Spinner from "./Components/Spinner.js";
+import Error from "./Components/Error.jsx";
 import "./App.css";
 
 const App = () => {
   const [tab, setTab] = useState("encryption");
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
 
   const changeTab = () => {
     if (tab === "encryption") {
@@ -18,6 +20,12 @@ const App = () => {
       setTab("encryption");
     }
   };
+
+  if(error){
+    return(
+      <Error error={error} setError={setError} />
+    )
+  }
 
   return (
     <div className="container">
@@ -32,8 +40,8 @@ const App = () => {
         <Tab value="decryption" label="decryption" />
       </Tabs>
       <div>
-        {tab === "encryption" && <ImageUpload isDecryption={false}/>}
-        {tab === "decryption" && <ImageUpload isDecryption={true}/>}
+        {tab === "encryption" && <ImageUpload isDecryption={false} setError={setError} />}
+        {tab === "decryption" && <ImageUpload isDecryption={true} setError={setError} />}
       </div>
     </div>
   );

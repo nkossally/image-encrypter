@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Error = ({ hideError, errorMessage }) => {
-  const [image, setImage] = useState(null);
+const Error = ({ error, setError }) => {
+  return (
+    <div>
+      <button onClick={()=>setError("")}>Back</button>
 
-  const handleInputChange = (e) => {
-    setInputText(e.target.value);
-    console.log(e.target.value);
-  };
-
-  return <div></div>;
+      {error}
+    </div>
+  );
 };
 
 export default Error;
