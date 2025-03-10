@@ -2,7 +2,7 @@
   "name": "image-encrypter",
   "homepage": "https://nkossally.github.io/image_encrypter",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
