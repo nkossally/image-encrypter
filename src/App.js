@@ -3,15 +3,10 @@ import { Tabs } from "@mui/material";
 
 import Tab from "@mui/material/Tab";
 import ImageUpload from "./Components/ImageUpload.jsx";
-import Spinner from "./Components/Spinner.js";
-import Error from "./Components/Error.jsx";
 import "./App.css";
 
 const App = () => {
   const [tab, setTab] = useState("encryption");
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-
 
   const changeTab = () => {
     if (tab === "encryption") {
@@ -21,11 +16,6 @@ const App = () => {
     }
   };
 
-  if(error){
-    return(
-      <Error error={error} setError={setError} />
-    )
-  }
 
   return (
     <div className="container">
@@ -40,8 +30,8 @@ const App = () => {
         <Tab value="decryption" label="decryption" />
       </Tabs>
       <div>
-        {tab === "encryption" && <ImageUpload isDecryption={false} setError={setError} />}
-        {tab === "decryption" && <ImageUpload isDecryption={true} setError={setError} />}
+        {tab === "encryption" && <ImageUpload isDecryption={false} />}
+        {tab === "decryption" && <ImageUpload isDecryption={true} />}
       </div>
     </div>
   );
