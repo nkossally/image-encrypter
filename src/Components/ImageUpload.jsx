@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { API_URL } from "../config";
 import Spinner from "./Spinner";
 import Result from "./Result";
+import classNames from "classnames" 
 
 const ImageUpload = ({ isDecryption }) => {
   const [image, setImage] = useState(null);
@@ -67,10 +68,10 @@ const ImageUpload = ({ isDecryption }) => {
     <>
       {showResult && <Result setShowResult={setShowResult} hexKey={hexKey} error={error} url={url} responseMessage={responseMessage} />}
       {!showResult && (
-        <div>
+        <div className="form">
           <h1>Image Upload</h1>
           {/* File input for image */}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <input className="form-element" type="file" accept="image/*" onChange={handleImageChange} />
 
           {/* Image preview */}
           {preview && (
@@ -80,11 +81,11 @@ const ImageUpload = ({ isDecryption }) => {
               style={{ width: "200px", height: "auto" }}
             />
           )}
-          {isDecryption && <input onChange={handleInputChange} />}
+          {isDecryption && <input className="form-element" onChange={handleInputChange} />}
 
           {/* Button to upload image */}
           {image && (
-            <button onClick={handleImageEncryption}>Upload Image</button>
+            <button className={classNames("form-element")} onClick={handleImageEncryption}>Upload Image</button>
           )}
 
           {isLoading && <Spinner />}

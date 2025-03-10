@@ -31,3 +31,31 @@ code {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.info{
+  font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.form-element{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 200px;
+}
+
+input {
+  max-width:300px;
+}
+
+.info-paragraph {
+  margin: 10px 0 10px;
+}
