@@ -27,7 +27,6 @@ const ImageUpload = ({ isDecryption, setError }) => {
     formData.append("key", inputText);
 
     let endpoint = isDecryption ? "/decrypt" : "/encrypt";
-    // endpoint = "/test"
 
     try {
       setIsLoading(true)
