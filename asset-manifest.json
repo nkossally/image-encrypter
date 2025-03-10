@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/image_encrypter/static/css/main.d0b28127.css",
+    "main.js": "/image_encrypter/static/js/main.2b0df8ae.js",
+    "static/js/604.ab587064.chunk.js": "/image_encrypter/static/js/604.ab587064.chunk.js",
+    "index.html": "/image_encrypter/index.html",
+    "main.d0b28127.css.map": "/image_encrypter/static/css/main.d0b28127.css.map",
+    "main.2b0df8ae.js.map": "/image_encrypter/static/js/main.2b0df8ae.js.map",
+    "604.ab587064.chunk.js.map": "/image_encrypter/static/js/604.ab587064.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d0b28127.css",
+    "static/js/main.2b0df8ae.js"
+  ]
+}
