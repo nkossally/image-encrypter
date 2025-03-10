@@ -1,6 +1,7 @@
 import React from "react";
 
 const Result = ({ url, setShowResult, responseMessage, hexKey, error }) => {
+    console.log("error", error)
     return (
     <div>
       <button onClick={() => setShowResult(false)}>Back</button>

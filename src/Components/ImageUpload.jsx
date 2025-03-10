@@ -55,9 +55,10 @@ const ImageUpload = ({ isDecryption }) => {
       setShowResult(true);
       
       console.log("upload resp", json);
-    } catch (error) {
+    } catch (err) {
       setIsLoading(false);
-      setError(JSON.stringify(error));
+      setError("Failed to upload and encrypt image. Try encrypting a smaller image");
+      console.log("error", err)
       setShowResult(true);
     }
   };

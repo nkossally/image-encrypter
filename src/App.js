@@ -1,38 +1,37 @@
 import React, { useState } from "react";
-import { Tabs } from "@mui/material";
+import { Tab } from '@mui/material';
+import { TabList, TabContext, TabPanel } from '@mui/lab';
 
-import Tab from "@mui/material/Tab";
+
+import { Info } from "./Components/Info.jsx";
 import ImageUpload from "./Components/ImageUpload.jsx";
 import "./App.css";
 
 const App = () => {
   const [tab, setTab] = useState("encryption");
 
-  const changeTab = () => {
-    if (tab === "encryption") {
-      setTab("decryption");
-    } else {
-      setTab("encryption");
-    }
+  const handleChange = (event, newValue) => {
+    setTab(newValue);
   };
-
 
   return (
     <div className="container">
-      <Tabs
-        value={tab}
-        onChange={changeTab}
-        aria-label="wrapped label tabs example"
-      >
-        <Tab
-          value="encryption" label="encryption"
-        />
-        <Tab value="decryption" label="decryption" />
-      </Tabs>
-      <div>
-        {tab === "encryption" && <ImageUpload isDecryption={false} />}
-        {tab === "decryption" && <ImageUpload isDecryption={true} />}
-      </div>
+      <TabContext value={tab}>
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Tab value="encryption" label="Encryption" />
+          <Tab value="decryption" label="Decryption" />
+          <Tab value="info" label="Info" />
+        </TabList>
+        <TabPanel value="encryption">
+          <ImageUpload isDecryption={false} />
+        </TabPanel>
+        <TabPanel value="decryption">
+          <ImageUpload isDecryption={true} />
+        </TabPanel>
+        <TabPanel value="info">
+          <Info />
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };
