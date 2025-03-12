@@ -25,7 +25,6 @@ const ImageUpload = ({ isDecryption }) => {
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleImageEncryption = async () => {
@@ -55,11 +54,9 @@ const ImageUpload = ({ isDecryption }) => {
 
       setShowResult(true);
       
-      console.log("upload resp", json);
     } catch (err) {
       setIsLoading(false);
       setError("Failed to upload and encrypt image. Try encrypting a smaller image");
-      console.log("error", err)
       setShowResult(true);
     }
   };
@@ -71,20 +68,20 @@ const ImageUpload = ({ isDecryption }) => {
         <div className="form">
           <h1 className="heading">Image Upload</h1>
           {/* File input for image */}
-          <input className="form-element" type="file" accept="image/*" onChange={handleImageChange} />
+         {!isLoading && <input className="form-element" type="file" accept="image/*" onChange={handleImageChange} />}
 
           {/* Image preview */}
-          {preview && (
+          {preview && image && !isLoading && (
             <img
               src={preview}
               alt="Image preview"
               style={{ width: "200px", height: "auto" }}
             />
           )}
-          {isDecryption && <input className="form-element" onChange={handleInputChange} />}
+          {isDecryption && !isLoading  && <input className="form-element" onChange={handleInputChange} />}
 
           {/* Button to upload image */}
-          {image && (
+          {image && !isLoading && (
             <button className={classNames("form-element")} onClick={handleImageEncryption}>Upload Image</button>
           )}
 

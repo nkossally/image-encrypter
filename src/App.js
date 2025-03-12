@@ -18,8 +18,8 @@ const App = () => {
     <div className="container">
       <TabContext value={tab}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab value="encryption" label="Encryption" />
-          <Tab value="decryption" label="Decryption" />
+          <Tab value="encryption" label="Encrypt" />
+          <Tab value="decryption" label="Decrypt" />
           <Tab value="info" label="Info" />
         </TabList>
         <TabPanel value="encryption">

@@ -1,7 +1,6 @@
 import React from "react";
 
 const Result = ({ url, setShowResult, responseMessage, hexKey, error }) => {
-    console.log("error", error)
     return (
     <div>
       <button className="vertical-margin" onClick={() => setShowResult(false)}>Back</button>
