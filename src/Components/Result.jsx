@@ -4,15 +4,15 @@ const Result = ({ url, setShowResult, responseMessage, hexKey, error }) => {
     console.log("error", error)
     return (
     <div>
-      <button onClick={() => setShowResult(false)}>Back</button>
-      {responseMessage && <div>{responseMessage}</div>}
-      {error && <div>{error}</div>}
+      <button className="vertical-margin" onClick={() => setShowResult(false)}>Back</button>
+      {responseMessage && <div className="vertical-margin">{responseMessage}</div>}
+      {error && <div className="vertical-margin">{error}</div>}
       {url && (
-        <a href={url} target="_blank">
+        <a href={url} className="vertical-margin" target="_blank">
           Image Link
         </a>
       )}
-      {hexKey && <div>Use this key for decryption: {hexKey} </div>}
+      {hexKey && <div className="vertical-margin">Use this key for decryption: {hexKey} </div>}
     </div>
   );
 };
