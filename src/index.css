@@ -63,3 +63,7 @@ input {
 .vertical-margin {
   margin: 10px 0 10px;
 }
+
+.heading {
+  color: #1a76d2;
+}

@@ -69,7 +69,7 @@ const ImageUpload = ({ isDecryption }) => {
       {showResult && <Result setShowResult={setShowResult} hexKey={hexKey} error={error} url={url} responseMessage={responseMessage} />}
       {!showResult && (
         <div className="form">
-          <h1>Image Upload</h1>
+          <h1 className="heading">Image Upload</h1>
           {/* File input for image */}
           <input className="form-element" type="file" accept="image/*" onChange={handleImageChange} />
 
