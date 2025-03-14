@@ -38,6 +38,7 @@ const ImageUpload = ({ isDecryption }) => {
     formData.append("key", inputText);
 
     let endpoint = isDecryption ? "/decrypt" : "/encrypt";
+    // endpoint = "/test"
 
     try {
       setIsLoading(true);
@@ -63,12 +64,27 @@ const ImageUpload = ({ isDecryption }) => {
 
   return (
     <>
-      {showResult && <Result setShowResult={setShowResult} hexKey={hexKey} error={error} url={url} responseMessage={responseMessage} />}
+      {showResult && (
+        <Result
+          setShowResult={setShowResult}
+          hexKey={hexKey}
+          error={error}
+          url={url}
+          responseMessage={responseMessage}
+        />
+      )}
       {!showResult && (
         <div className="form">
           <h1 className="heading">Image Upload</h1>
           {/* File input for image */}
-         {!isLoading && <input className="form-element" type="file" accept="image/*" onChange={handleImageChange} />}
+          {!isLoading && (
+            <input
+              className={classNames("file-input")}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          )}
 
           {/* Image preview */}
           {preview && image && !isLoading && (
@@ -78,14 +94,18 @@ const ImageUpload = ({ isDecryption }) => {
               style={{ width: "200px", height: "auto" }}
             />
           )}
-          {isDecryption && !isLoading  && <input className="form-element" onChange={handleInputChange} />}
+            {isDecryption && !isLoading && (
+              <input className="key-input" onChange={handleInputChange} />
+            )}
 
-          {/* Button to upload image */}
-          {image && !isLoading && (
-            <button className={classNames("form-element")} onClick={handleImageEncryption}>Upload Image</button>
-          )}
+            {/* Button to upload image */}
+            {image && !isLoading && (
+              <button className="upload-button" onClick={handleImageEncryption}>
+                Upload Image
+              </button>
+            )}
 
-          {isLoading && <Spinner />}
+            {isLoading && <Spinner />}
         </div>
       )}
     </>

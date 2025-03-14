@@ -52,9 +52,28 @@ button {
   width: 100px;
 }
 
-input {
+.key-input{
   max-width:300px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
+
 }
+
+.file-input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: transparent !important; /* Hides the text */
+  font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
+	/* background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit; */
+}
+
 
 .info-paragraph {
   margin: 10px 0 10px;
@@ -66,4 +85,27 @@ input {
 
 .heading {
   color: #1a76d2;
+}
+
+.upload-button {
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
+  /* padding: 5px 10px;
+  width: 150px; */
+	/* color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit; */
+}
+
+.upload-columns{
+  display: flex;
+  /* flex-direction: row; */
+
+  @media only screen and (max-width: 600px) {
+  }
 }
