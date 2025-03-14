@@ -15,6 +15,25 @@ const ImageUpload = ({ isDecryption }) => {
   const [error, setError] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
 
+  const hexLetters = "abcdefABCDEF0123456789"
+
+  const getHexKeyInputIsValid = () =>{
+    if(inputText.length !== 32) return false;
+    for(let i = 0; i < inputText.length; i++){
+      if(!hexLetters.includes(inputText[i])){
+        console.log("bad letter")
+        return false
+      }
+    }
+    return true
+  }
+  
+  const getCanSubmit = () =>{
+    if( isDecryption && !getHexKeyInputIsValid()) return false
+    if(!image) return false
+    return true
+  }
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -99,8 +118,8 @@ const ImageUpload = ({ isDecryption }) => {
             )}
 
             {/* Button to upload image */}
-            {image && !isLoading && (
-              <button className="upload-button" onClick={handleImageEncryption}>
+            {image && !isLoading &&  getCanSubmit() && (
+              <button className="upload-button" disabled={!getCanSubmit()} onClick={handleImageEncryption}>
                 Upload Image
               </button>
             )}

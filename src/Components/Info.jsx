@@ -10,8 +10,8 @@ export const Info = () => {
         link for the decrypted image will appear once decryption is complete.
       </div>
       <div className="info-paragraph">
-        This app works best on small images. Large images will be rejected by
-        the server. Color images will be converted to black and white.
+        If an image is too large to be encrypted/decrypted by the server, try a
+        smaller image. Color images will be converted to black and white.
       </div>
     </div>
   );
