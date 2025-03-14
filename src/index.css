@@ -109,3 +109,8 @@ button {
   @media only screen and (max-width: 600px) {
   }
 }
+
+.progress-bar-label{
+  color: #1a76d2;
+
+}

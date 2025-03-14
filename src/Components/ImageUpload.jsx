@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { API_URL } from "../config";
-import Spinner from "./Spinner";
+import ProgressBar from "./ProgressBar";
 import Result from "./Result";
 import classNames from "classnames" 
 
@@ -105,7 +105,7 @@ const ImageUpload = ({ isDecryption }) => {
               </button>
             )}
 
-            {isLoading && <Spinner />}
+            {isLoading && <ProgressBar isDecryption={isDecryption} />}
         </div>
       )}
     </>

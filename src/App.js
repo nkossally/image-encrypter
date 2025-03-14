@@ -5,7 +5,6 @@ import { TabList, TabContext, TabPanel } from '@mui/lab';
 
 import { Info } from "./Components/Info.jsx";
 import ImageUpload from "./Components/ImageUpload.jsx";
-import ProgressBar from "./Components/ProgressBarr.jsx";
 import "./App.css";
 
 const App = () => {
