@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/image-encrypter/static/css/main.416d8689.css",
-    "main.js": "/image-encrypter/static/js/main.d072eea9.js",
+    "main.css": "/image-encrypter/static/css/main.dd47ea8a.css",
+    "main.js": "/image-encrypter/static/js/main.bd7456e7.js",
     "static/js/604.ab587064.chunk.js": "/image-encrypter/static/js/604.ab587064.chunk.js",
     "index.html": "/image-encrypter/index.html",
-    "main.416d8689.css.map": "/image-encrypter/static/css/main.416d8689.css.map",
-    "main.d072eea9.js.map": "/image-encrypter/static/js/main.d072eea9.js.map",
+    "main.dd47ea8a.css.map": "/image-encrypter/static/css/main.dd47ea8a.css.map",
+    "main.bd7456e7.js.map": "/image-encrypter/static/js/main.bd7456e7.js.map",
     "604.ab587064.chunk.js.map": "/image-encrypter/static/js/604.ab587064.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.416d8689.css",
-    "static/js/main.d072eea9.js"
+    "static/css/main.dd47ea8a.css",
+    "static/js/main.bd7456e7.js"
   ]
 }
