@@ -68,6 +68,9 @@ const ImageUpload = ({ isDecryption }) => {
       });
       const json = await response.json();
       setIsLoading(false);
+      if(json["error"]){
+        setError(json["error"])
+      }
 
       setResponseMessage(json["message"]);
       setUrl(json["url"]);
@@ -77,18 +80,23 @@ const ImageUpload = ({ isDecryption }) => {
       
     } catch (err) {
       setIsLoading(false);
-      setError("Failed to upload and encrypt image. Try encrypting a smaller image");
+      setError(`Failed to upload and ${isDecryption ? "decrypt" : "encrypt"} image. Try encrypting a smaller image.`);
       setShowResult(true);
     }
   };
+
+  const goBack = () =>{
+    setShowResult(false)
+    setError("")
+  }
 
   return (
     <>
       {showResult && (
         <Result
-          setShowResult={setShowResult}
           hexKey={hexKey}
           error={error}
+          goBack={goBack}
           url={url}
           responseMessage={responseMessage}
         />

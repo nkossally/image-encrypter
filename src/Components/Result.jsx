@@ -1,9 +1,9 @@
 import React from "react";
 
-const Result = ({ url, setShowResult, responseMessage, hexKey, error }) => {
+const Result = ({ url, goBack, responseMessage, hexKey, error }) => {
     return (
     <div>
-      <button className="vertical-margin" onClick={() => setShowResult(false)}>Back</button>
+      <button className="vertical-margin" onClick={goBack}>Back</button>
       {responseMessage && <div className="vertical-margin">{responseMessage}</div>}
       {error && <div className="vertical-margin">{error}</div>}
       {url && (
