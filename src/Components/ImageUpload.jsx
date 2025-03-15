@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API_URL } from "../config";
 import ProgressBar from "./ProgressBar";
 import Spinner from "./Spinner";
@@ -15,23 +15,34 @@ const ImageUpload = ({ isDecryption }) => {
   const [hexKey, setHexKey] = useState("")
   const [error, setError] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
+  const [validationError, setValidationError] = useState(false)
 
   const hexLetters = "abcdefABCDEF0123456789"
 
-  const getHexKeyInputIsValid = () =>{
-    if(inputText.length !== 32) return false;
-    for(let i = 0; i < inputText.length; i++){
-      if(!hexLetters.includes(inputText[i])){
-        console.log("bad letter")
+  const getHexKeyInputIsValid = (currInput, shouldSetErrors) => {
+    if(currInput.length !== 32){
+      if(shouldSetErrors) setValidationError("Key must have 32 characters.")
+      return false
+    }
+    for(let i = 0; i < currInput.length; i++){
+      if(!hexLetters.includes(currInput[i])){
+       if(shouldSetErrors) setValidationError("Key contains an invalid character.")
         return false
       }
     }
+    if(shouldSetErrors) setValidationError("")
     return true
   }
   
-  const getCanSubmit = () =>{
-    if( isDecryption && !getHexKeyInputIsValid()) return false
-    if(!image) return false
+  const getCanSubmit = (shouldSetErrors) => {
+
+    if( isDecryption && !getHexKeyInputIsValid(inputText, shouldSetErrors)){
+      return false
+    }
+    if(!image){
+      return false;
+    }
+    if(shouldSetErrors) setValidationError("")
     return true
   }
 
@@ -45,6 +56,7 @@ const ImageUpload = ({ isDecryption }) => {
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
+    getHexKeyInputIsValid(e.target.value, true)
   };
 
   const handleImageEncryption = async () => {
@@ -122,13 +134,14 @@ const ImageUpload = ({ isDecryption }) => {
               className="fade-in"
             />
           )}
+          <div className={classNames("validation-error", "fade-in")}> {validationError} </div>
             {isDecryption && !isLoading && (
               <input className={classNames("key-input", "fade-in")} placeholder="enter key" onChange={handleInputChange} />
             )}
 
             {/* Button to upload image */}
-            {image && !isLoading &&  getCanSubmit() && (
-              <button className={classNames("upload-button","fade-in")} disabled={!getCanSubmit()} onClick={handleImageEncryption}>
+            {image && !isLoading &&  getCanSubmit(false) && (
+              <button className={classNames("upload-button","fade-in")} disabled={!getCanSubmit(false)} onClick={handleImageEncryption}>
                 Upload Image
               </button>
             )}
