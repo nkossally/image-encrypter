@@ -1,6 +1,7 @@
+import classNames from "classnames"
 export const Info = () => {
   return (
-    <div className="info">
+    <div className={classNames("info", "fade-in")}>
       <div className="info-paragraph">
         This app is for encrypting images using the Advanced Encryption Standard
         (AES). On the encryption tab, upload an image. Once the image is

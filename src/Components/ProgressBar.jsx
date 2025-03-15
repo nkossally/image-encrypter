@@ -31,7 +31,7 @@ const ProgressBar = ({isDecryption}) => {
 
 
   return (
-    <div>
+    <div className="fade-in">
       { progress > 0 && progress < 100 && (
         <div>
           <h3 className="progress-bar-label"> {isDecryption ? "Decryption " : "Encryption"}Progress: {progress}%</h3>

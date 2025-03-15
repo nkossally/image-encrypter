@@ -103,11 +103,10 @@ const ImageUpload = ({ isDecryption }) => {
       )}
       {!showResult && (
         <div className="form">
-          <h1 className="heading">Image Upload</h1>
           {/* File input for image */}
           {!isLoading && (
             <input
-              className={classNames("file-input")}
+              className={classNames("file-input", "fade-in")}
               type="file"
               accept="image/*"
               onChange={handleImageChange}
@@ -120,15 +119,16 @@ const ImageUpload = ({ isDecryption }) => {
               src={preview}
               alt="Image preview"
               style={{ width: "200px", height: "auto" }}
+              className="fade-in"
             />
           )}
             {isDecryption && !isLoading && (
-              <input className="key-input" onChange={handleInputChange} />
+              <input className={classNames("key-input", "fade-in")} placeholder="enter key" onChange={handleInputChange} />
             )}
 
             {/* Button to upload image */}
             {image && !isLoading &&  getCanSubmit() && (
-              <button className="upload-button" disabled={!getCanSubmit()} onClick={handleImageEncryption}>
+              <button className={classNames("upload-button","fade-in")} disabled={!getCanSubmit()} onClick={handleImageEncryption}>
                 Upload Image
               </button>
             )}
