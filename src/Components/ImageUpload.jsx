@@ -152,7 +152,7 @@ const ImageUpload = ({ isDecryption }) => {
           )}
           {isLoading && <Spinner />}
 
-          {/* {isLoading && <ProgressBar isDecryption={isDecryption} />} */}
+          {isLoading && <ProgressBar isDecryption={isDecryption} />}
         </div>
       )}
     </>
