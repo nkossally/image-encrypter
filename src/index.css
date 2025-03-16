@@ -113,6 +113,21 @@ button {
 
 }
 
+.styled-button-small {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
+  background-color: white ;
+  width: 150px;
+  height: 20px;
+  border: 1px solid #1a76d2;
+  border-radius: 3px;
+  color: #1a76d2;
+  font-weight: 700;
+  cursor: pointer; 
+}
+
 .styled-button:active {
   background-color:#1a76d2;
   color: white;

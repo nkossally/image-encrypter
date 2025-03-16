@@ -3,7 +3,7 @@ import classNames from "classnames"
 const Result = ({ url, goBack, responseMessage, hexKey, error }) => {
     return (
     <div>
-      <button className={classNames("vertical-margin", "fade-in")} onClick={goBack}>Back</button>
+      <button className={classNames("vertical-margin", "fade-in", "styled-button-small")} onClick={goBack}>Back</button>
       {responseMessage && <div className={classNames("vertical-margin", "fade-in")}>{responseMessage}</div>}
       {error && <div className={classNames("vertical-margin", "fade-in")}>{error}</div>}
       {url && (
