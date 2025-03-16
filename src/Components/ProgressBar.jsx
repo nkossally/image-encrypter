@@ -25,26 +25,10 @@ const ProgressBar = ({ isDecryption }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const socket = io(API_URL); // Connect to Flask backend
-
-  //   // Listen for progress updates from the backend
-  //   socket.on("progress_update", (data) => {
-  //     setProgress(data.progress);
-  //     if (data.progress === 100) {
-  //       setIsTaskRunning(false); // Task is complete
-  //     }
-  //   });
-
-  //   return () => {
-  //     socket.disconnect(); // Cleanup when the component unmounts
-  //   };
-  // }, []);
-
 
   return (
     <div className="fade-in">
-      {progress > 0 && progress < 100 && (
+      {progress >= 0 && progress < 100 && (
         <div>
           <h3 className="progress-bar-label">
             {" "}
