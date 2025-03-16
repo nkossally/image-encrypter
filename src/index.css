@@ -63,17 +63,27 @@ button {
 .file-input {
   margin-top: 10px;
   margin-bottom: 10px;
-  color: transparent !important; /* Hides the text */
+  font-size: 13px;
   font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
-	/* background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit; */
+  background-color: white ;
+  width: 150px;
+  height: 20px;
+  border: 1px solid #1a76d2;
+  border-radius: 3px;
+  color: #1a76d2;
+  font-weight: 700;
+  cursor: pointer; 
 }
 
+.file-input:active {
+  background-color:#1a76d2;
+  color: white;
+}
+
+.file-input:hover {
+  background-color:#1a76d2;
+  color: white;
+}
 
 .info-paragraph {
   margin: 10px 0 10px;
@@ -87,19 +97,30 @@ button {
   color: #1a76d2;
 }
 
-.upload-button {
-
+.styled-button {
   margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 15px;
   font-family: 'Roboto', "Helvetica", "Arial", "sans-serif";
-  /* padding: 5px 10px;
-  width: 150px; */
-	/* color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit; */
+  background-color: white ;
+  width: 150px;
+  height: 30px;
+  border: 1px solid #1a76d2;
+  border-radius: 3px;
+  color: #1a76d2;
+  font-weight: 700;
+  cursor: pointer; 
+
+}
+
+.styled-button:active {
+  background-color:#1a76d2;
+  color: white;
+}
+
+.styled-button:hover {
+  background-color:#1a76d2;
+  color: white;
 }
 
 .upload-columns{
@@ -113,4 +134,37 @@ button {
 .progress-bar-label{
   color: #1a76d2;
 
+}
+
+/* Define the fade-in and move-up animation */
+@keyframes fadeInMoveUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly below */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End in the original position */
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Apply the animation to the element */
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards; /* Adjust duration, timing function, and "forwards" to retain the end state */
+}
+
+.validation-error {
+  margin-top: 10px;
+  margin-bottom: -6px;
+  height: 15px;
+  color: red;
 }

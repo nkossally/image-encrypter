@@ -36,35 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* Define the fade-in and move-up animation */
-@keyframes fadeInMoveUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px); /* Start slightly below */
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0); /* End in the original position */
-  }
-}
-
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Apply the animation to the element */
-.fade-in {
-  animation: fadeIn 0.5s ease-out forwards; /* Adjust duration, timing function, and "forwards" to retain the end state */
-}
-
-.validation-error {
-  height: 15px;
-  color: red;
-}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { API_URL } from "../config";
 import ProgressBar from "./ProgressBar";
+import FileInput from "./FileInput";
 import Spinner from "./Spinner";
 import Result from "./Result";
 import classNames from "classnames" 
@@ -46,8 +47,7 @@ const ImageUpload = ({ isDecryption }) => {
     return true
   }
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (file) => {
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file)); // Generate preview URL for image
@@ -116,14 +116,8 @@ const ImageUpload = ({ isDecryption }) => {
       {!showResult && (
         <div className="form">
           {/* File input for image */}
-          {!isLoading && (
-            <input
-              className={classNames("file-input", "fade-in")}
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          )}
+
+          {!isLoading && <FileInput handleImageChange={handleImageChange} />}
 
           {/* Image preview */}
           {preview && image && !isLoading && (
@@ -134,20 +128,31 @@ const ImageUpload = ({ isDecryption }) => {
               className="fade-in"
             />
           )}
-          <div className={classNames("validation-error", "fade-in")}> {validationError} </div>
-            {isDecryption && !isLoading && (
-              <input className={classNames("key-input", "fade-in")} placeholder="enter key" onChange={handleInputChange} />
-            )}
+          <div className={classNames("validation-error", "fade-in")}>
+            {" "}
+            {validationError}{" "}
+          </div>
+          {isDecryption && !isLoading && (
+            <input
+              className={classNames("key-input", "fade-in")}
+              placeholder="enter key"
+              onChange={handleInputChange}
+            />
+          )}
 
-            {/* Button to upload image */}
-            {image && !isLoading &&  getCanSubmit(false) && (
-              <button className={classNames("upload-button","fade-in")} disabled={!getCanSubmit(false)} onClick={handleImageEncryption}>
-                Upload Image
-              </button>
-            )}
-            {isLoading && <Spinner />}
+          {/* Button to upload image */}
+          {image && !isLoading && getCanSubmit(false) && (
+            <button
+              className={classNames("styled-button", "fade-in")}
+              disabled={!getCanSubmit(false)}
+              onClick={handleImageEncryption}
+            >
+              Submit Image
+            </button>
+          )}
+          {isLoading && <Spinner />}
 
-            {/* {isLoading && <ProgressBar isDecryption={isDecryption} />} */}
+          {/* {isLoading && <ProgressBar isDecryption={isDecryption} />} */}
         </div>
       )}
     </>
