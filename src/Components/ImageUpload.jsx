@@ -150,9 +150,9 @@ const ImageUpload = ({ isDecryption }) => {
               Submit Image
             </button>
           )}
-          {isLoading && <Spinner />}
+          {/* {isLoading && <Spinner />} */}
 
-          {/* {isLoading && <ProgressBar isDecryption={isDecryption} />} */}
+          {isLoading && <ProgressBar isDecryption={isDecryption} />}
         </div>
       )}
     </>
