@@ -5,7 +5,7 @@ import { TabList, TabContext, TabPanel } from '@mui/lab';
 
 import { Info } from "./Components/Info.jsx";
 import ImageUpload from "./Components/ImageUpload.jsx";
-import "./App.css";
+import "./index.css";
 
 const App = () => {
   const [tab, setTab] = useState("encryption");

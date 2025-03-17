@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { API_URL } from "../config";
+import Checkbox from "@mui/material/Checkbox";
 import ProgressBar from "./ProgressBar";
 import FileInput from "./FileInput";
 import Spinner from "./Spinner";
@@ -135,22 +136,18 @@ const ImageUpload = ({ isDecryption }) => {
               className="fade-in"
             />
           )}
+          {!isLoading && (
+            <div>
+              <Checkbox onClick={handleColorToggle} checked={isBlackAndWhite} />
+              <span className={"check-box-label"}>
+                {" "}
+                Image is black and white.{" "}
+              </span>
+            </div>
+          )}
           <div className={classNames("validation-error", "fade-in")}>
             {" "}
             {validationError}{" "}
-          </div>
-          <div>
-            {" "}
-            <ToggleButtonGroup>
-              <ToggleButton
-                value=""
-                selected={isBlackAndWhite}
-                onClick={handleColorToggle}
-              >
-                <CheckIcon />
-              </ToggleButton>
-            </ToggleButtonGroup>
-            <span> Image is black and white. </span>
           </div>
           {isDecryption && !isLoading && (
             <input

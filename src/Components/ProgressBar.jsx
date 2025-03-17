@@ -12,7 +12,6 @@ const ProgressBar = ({ isDecryption }) => {
     const channel = pusher.subscribe("progress_update");
     channel.bind("progress_update", (data) => {
       setProgress(data.progress);
-      console.log(data)
     });
     return () => {
       pusher.unsubscribe("progress_update");
