@@ -25,7 +25,7 @@ const ProgressBar = ({ isDecryption }) => {
         <div>
           <h3 className="progress-bar-label">
             {" "}
-            {isDecryption ? "Decryption " : "Encryption"}Progress: {progress}%
+            {isDecryption ? "Decryption " : "Encryption "}Progress: {progress}%
           </h3>
           <progress value={progress} max="100"></progress>
         </div>
