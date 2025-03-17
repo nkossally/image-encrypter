@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 import { API_URL } from "../config";
 import ProgressBar from "./ProgressBar";
 import FileInput from "./FileInput";
@@ -17,6 +19,11 @@ const ImageUpload = ({ isDecryption }) => {
   const [error, setError] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const [validationError, setValidationError] = useState(false)
+  const [isBlackAndWhite, setIsBlackAndWhite] = useState(false)
+
+  const handleColorToggle = ()=>{
+    setIsBlackAndWhite(!isBlackAndWhite)
+  }
 
   const hexLetters = "abcdefABCDEF0123456789"
 
@@ -68,9 +75,9 @@ const ImageUpload = ({ isDecryption }) => {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("key", inputText);
+    formData.append("isBlackAndWhite", isBlackAndWhite);
 
     let endpoint = isDecryption ? "/decrypt" : "/encrypt";
-    // endpoint = "/test"
 
     try {
       setIsLoading(true);
@@ -131,6 +138,19 @@ const ImageUpload = ({ isDecryption }) => {
           <div className={classNames("validation-error", "fade-in")}>
             {" "}
             {validationError}{" "}
+          </div>
+          <div>
+            {" "}
+            <ToggleButtonGroup>
+              <ToggleButton
+                value=""
+                selected={isBlackAndWhite}
+                onClick={handleColorToggle}
+              >
+                <CheckIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <span> Image is black and white. </span>
           </div>
           {isDecryption && !isLoading && (
             <input
