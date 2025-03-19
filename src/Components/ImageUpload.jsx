@@ -160,7 +160,7 @@ const ImageUpload = ({ isDecryption }) => {
           {/* Button to upload image */}
           {image && !isLoading && getCanSubmit(false) && (
             <button
-              className={classNames("styled-button", "fade-in")}
+              className={classNames("styled-button-large", "fade-in")}
               disabled={!getCanSubmit(false)}
               onClick={handleImageEncryption}
             >
